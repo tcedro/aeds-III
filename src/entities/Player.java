@@ -7,15 +7,23 @@ public class Player {
     private String[] positions;
     private String collegeUniv;
     private String actTeam;
+    private String pickDate;
     
     public Player(){} 
-    public Player(String name, int id, int age, String[] positions, String collegeUniv, String actTeam) {
+    public Player(String name, int id, int age, String[] positions, String collegeUniv, String actTeam, String pickDate) {
         this.name = name;
         this.id = id;
         this.age = age;
         this.positions = positions;
         this.collegeUniv = collegeUniv;
         this.actTeam = actTeam;
+        this.pickDate = pickDate;
+    }
+    public String getPickDate() {
+        return pickDate;
+    }
+    public void setPickDate(String pickDate) {
+        this.pickDate = pickDate;
     }
     public String getName() {
         return name;
@@ -53,5 +61,27 @@ public class Player {
     public void setActTeam(String actTeam) {
         this.actTeam = actTeam;
     }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Player other = (Player) obj;
+        if (id != other.id)
+            return false;
+        return true;
+    }
+
+    
     
 }
