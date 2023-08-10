@@ -1,14 +1,11 @@
 package src;
 
-import src.utils.FileManagement;
+import src.utils.FileManager;
 
 public class App {
     public static void main(String[] args) {
-        FileManagement file = new FileManagement();
         String path = "src\\data\\nfl_draft.csv";
-        
-        file.setFile(path);
-        file.setContent();
+
 
     }
 }
