@@ -14,11 +14,11 @@ public class FileManager
     public FileManager() {
         this(null, null);
     }
-    public FileManager(File file) {
+    public FileManager(String file) {
         this(file, null);
     }
-    public FileManager(File file, String[] content) {
-        this.file = file;
+    public FileManager(String file, String[] content) {
+        this.file = new File(file);
         if(content != null) {
             this.content = content;
             this.length = content.length;
@@ -40,11 +40,12 @@ public class FileManager
             while(raf.getFilePointer() < raf.length()) {
                 this.content[i++] = raf.readLine();
             }
+            raf.close();
             length = i;
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
-        } 
+        }
     }
     public String[] getContent() {
         return content;
