@@ -3,7 +3,11 @@ package src.utils;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class CsvManager extends FileManager{
+public class CsvManager extends FileManager {
+    public CsvManager() {}
+    public CsvManager(String path) {
+        super(path);
+    }
     public String readTuple(int target) {
         String value = null;
         try {
@@ -16,5 +20,4 @@ public class CsvManager extends FileManager{
         } catch (IOException e) { System.out.println(e.getMessage()); }
         return value;
     }
-
 }
