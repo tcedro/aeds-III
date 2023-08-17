@@ -1,5 +1,7 @@
 package src.entities;
 
+import java.util.Arrays;
+
 public class Player {
     private String name;
     private int id;
@@ -81,6 +83,13 @@ public class Player {
             return false;
         return true;
     }
+    @Override
+    public String toString() {
+        return "Player [name=" + name + ", id=" + id + ", age=" + age + ", positions=" + Arrays.toString(positions)
+                + ", collegeUniv=" + collegeUniv + ", actTeam=" + actTeam + ", pickDate=" + pickDate + "]";
+    }
+
+    
 
     
     

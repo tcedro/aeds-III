@@ -19,6 +19,8 @@ public class App {
     public static void main(String[] args) {
         String path = pathConfig();
         CsvManager csvManager = new CsvManager(path);
-        csvManager.readAtrPlayer();
+        csvManager.convertCsvToBinary("teste.db");
+            
+        
     }
 }
