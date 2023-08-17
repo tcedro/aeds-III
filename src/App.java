@@ -1,5 +1,4 @@
 package src;
-
 import src.utils.CsvManager;
 
 public class App {
@@ -7,7 +6,7 @@ public class App {
         return System.getProperty("os.name").toLowerCase();
     } 
     public static String pathConfig() {
-        return isWindows()? "data\\nfl_draft.csv":"data/nfl_draft.csv";
+        return isWindows()? "src\\data\\nfl_draft.csv":"data/nfl_draft.csv";
     }
     public static boolean isWindows() {
         return (getSO().indexOf("win") >= 0);
@@ -19,6 +18,6 @@ public class App {
     public static void main(String[] args) {
         String path = pathConfig();
         CsvManager csvManager = new CsvManager(path);
-        System.out.println(csvManager.readTuple(234));
+        System.out.println(csvManager.readTuple(0));
     }
 }
