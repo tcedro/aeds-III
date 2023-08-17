@@ -1,5 +1,6 @@
 package src;
 
+
 import src.utils.CsvManager;
 
 public class App {
@@ -17,9 +18,12 @@ public class App {
     }
 
     public static void main(String[] args) {
+        
         String path = pathConfig();
+        String path1 = "src\\data\\nflPickPlayers.db";
         CsvManager csvManager = new CsvManager(path);
-        csvManager.convertCsvToBinary("teste.db");
+        
+        csvManager.convertCsvToBinary(path1);
             
         
     }
