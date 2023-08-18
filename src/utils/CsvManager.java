@@ -1,10 +1,8 @@
 package src.utils;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -20,12 +18,16 @@ public class CsvManager extends FileManager {
         String[] columns = line.split(","); 
         int age = 0;
         String name = columns[3];
+        String collegeUniv = "";
         int id = Integer.parseInt(columns[1]);
-        if(columns[6] != "") {
-            age = Integer.parseInt(columns[6]);
-        }  
+        try{
+            if(columns[6] != "") age = Integer.parseInt(columns[6]);
+        }  catch(ArrayIndexOutOfBoundsException e) { age = 0; }
+        try {
+           collegeUniv = columns[7];
+        } catch (ArrayIndexOutOfBoundsException e) { collegeUniv = "Nill"; }    
+        
         String[] positions = {columns[4], columns[5]};
-        String collegeUniv = columns[7];
         String actTeam = columns[2];
         String pickDate = columns[0];
 
@@ -42,7 +44,6 @@ public class CsvManager extends FileManager {
             arq  = new FileOutputStream(pathToWrite);
             dos = new DataOutputStream(arq);
             
-            raf.close();
             
             String line;
             int i = 0;
@@ -60,7 +61,6 @@ public class CsvManager extends FileManager {
                 dos.writeUTF(player.getCollegeUniv());
                 dos.writeUTF(player.getActTeam());
                 dos.writeUTF(player.getPickDate());
-                dos.writeChars(" ");
             
             }
         } catch(IOException e) { System.out.println(e.getMessage()); }
