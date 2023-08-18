@@ -19,10 +19,15 @@ public class CsvManager extends FileManager {
         int age = 0;
         String name = columns[3];
         String collegeUniv = "";
+        
+        //corrigir IDs
         int id = Integer.parseInt(columns[1]);
+
+        //Corrigir tuplas sem colunas.
         try{
             if(columns[6] != "") age = Integer.parseInt(columns[6]);
         }  catch(ArrayIndexOutOfBoundsException e) { age = 0; }
+        
         try {
            collegeUniv = columns[7];
         } catch (ArrayIndexOutOfBoundsException e) { collegeUniv = "Nill"; }    

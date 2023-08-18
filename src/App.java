@@ -18,13 +18,10 @@ public class App {
     }
 
     public static void main(String[] args) {
-        
         String path = pathConfig();
         String path1 = "src\\data\\nflPickPlayers.db";
+        
         CsvManager csvManager = new CsvManager(path);
-        
         csvManager.convertCsvToBinary(path1);
-            
-        
     }
 }
