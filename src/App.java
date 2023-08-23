@@ -1,7 +1,6 @@
 package src;
 
-
-import src.utils.CsvManager;
+import src.utils.Arquivo;
 
 public class App {
     public static String getSO() {
@@ -21,7 +20,7 @@ public class App {
         String path = pathConfig();
         String path1 = "src\\data\\nflPickPlayers.db";
         
-        CsvManager csvManager = new CsvManager(path);
-        csvManager.convertCsvToBinary(path1);
+        Arquivo csv = new Arquivo(path);
+        csv.convertCsvToBinary(path1);
     }
 }

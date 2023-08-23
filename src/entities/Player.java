@@ -1,5 +1,6 @@
 package src.entities;
 
+import java.sql.Date;
 import java.util.Arrays;
 
 public class Player {
@@ -9,22 +10,21 @@ public class Player {
     private String[] positions;
     private String collegeUniv;
     private String actTeam;
-    private String pickDate;
+    public int pickDate;
     
     public Player(){} 
-    public Player(String name, int id, int age, String[] positions, String collegeUniv, String actTeam, String pickDate) {
+    public Player(String name, int pickDate,int age, String[] positions, String collegeUniv, String actTeam) {
         this.name = name;
-        this.id = id;
         this.age = age;
         this.positions = positions;
         this.collegeUniv = collegeUniv;
         this.actTeam = actTeam;
         this.pickDate = pickDate;
     }
-    public String getPickDate() {
+    public int getPickDate() {
         return pickDate;
     }
-    public void setPickDate(String pickDate) {
+    public void setPickDate(int pickDate) {
         this.pickDate = pickDate;
     }
     public String getName() {
@@ -33,11 +33,11 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
-    public int getId() {
-        return id;
-    }
     public void setId(int id) {
         this.id = id;
+    }
+    public int getId() {
+        return id;
     }
     public int getAge() {
         return age;
@@ -62,13 +62,6 @@ public class Player {
     }
     public void setActTeam(String actTeam) {
         this.actTeam = actTeam;
-    }
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
     }
     @Override
     public boolean equals(Object obj) {

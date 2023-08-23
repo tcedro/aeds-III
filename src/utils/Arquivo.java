@@ -8,9 +8,9 @@ import java.io.RandomAccessFile;
 
 import src.entities.Player;
 
-public class CsvManager extends FileManager {
-    public CsvManager() {}
-    public CsvManager(String path) {
+public class Arquivo extends FileManager {
+    public Arquivo() {}
+    public Arquivo(String path) {
         super(path);
     }
 
@@ -19,10 +19,7 @@ public class CsvManager extends FileManager {
         int age = 0;
         String name = columns[3];
         String collegeUniv = "";
-        
-        //corrigir IDs
-        int id = Integer.parseInt(columns[1]);
-
+        int date = Integer.parseInt(columns[0]);
         //Corrigir tuplas sem colunas.
         try{
             if(columns[6] != "") age = Integer.parseInt(columns[6]);
@@ -34,9 +31,8 @@ public class CsvManager extends FileManager {
         
         String[] positions = {columns[4], columns[5]};
         String actTeam = columns[2];
-        String pickDate = columns[0];
 
-        return new Player(name, id, age, positions, collegeUniv, actTeam, pickDate);
+        return new Player(name, date,age, positions, collegeUniv, actTeam);
     }
     public void convertCsvToBinary(String pathToWrite) {
         DataOutputStream dos;
@@ -49,24 +45,30 @@ public class CsvManager extends FileManager {
             arq  = new FileOutputStream(pathToWrite);
             dos = new DataOutputStream(arq);
             
-            
-            String line;
+            String csvLine;
             int i = 0;
             
-            while ((line = raf.readLine()) != null) {
-                Player player = parsePlayer(line);
+            while ((csvLine = raf.readLine()) != null) {
+                Player player = parsePlayer(csvLine);
+                RandomAccessFile raf1 = new RandomAccessFile(pathToWrite, "r");
+                
+                player.setId(i);
                 System.out.println(i++ +" " + player.toString());
                 
-                dos.writeUTF(player.getName());
+                //escrevendo no arquivo
+                //tamanho do arquivo
+                dos.writeLong(raf1.length());
+                //lapide
+                dos.writeChar(' ');
                 dos.writeInt(player.getId());
+                dos.writeUTF(player.getName());
                 dos.writeInt(player.getAge());
-                
                 for (String position : player.getPositions()) dos.writeUTF(position);
-                
                 dos.writeUTF(player.getCollegeUniv());
                 dos.writeUTF(player.getActTeam());
-                dos.writeUTF(player.getPickDate());
-            
+                dos.writeInt(player.getPickDate());
+                
+               
             }
         } catch(IOException e) { System.out.println(e.getMessage()); }
     }
