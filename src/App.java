@@ -1,5 +1,6 @@
 package src;
 
+import src.services.Sort;
 import src.utils.Arquivo;
 
 public class App {
@@ -21,7 +22,9 @@ public class App {
         String path1 = "src\\data\\nflPickPlayers.db";
         
         Arquivo csv = new Arquivo(path);
-        csv.convertCsvToBinary(path1);
-        csv.readByteFile(path1);
+        csv.CsvToByte(path1);
+        csv.intercalacao_balanceada(path1);
+        
+        // Sort.Start(null);
     }
 }

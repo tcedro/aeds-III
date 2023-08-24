@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import src.entities.Player;
+import src.services.Sort;
 
 public class Arquivo extends FileManager {
     public Arquivo() {}
@@ -37,7 +38,8 @@ public class Arquivo extends FileManager {
 
         return new Player(name, date,age, positions, collegeUniv, actTeam);
     }
-    public void convertCsvToBinary(String pathWriteFile) {
+
+    public void CsvToByte(String pathWriteFile) {
         DataOutputStream dos;
         FileOutputStream arq;
         
@@ -104,9 +106,50 @@ public class Arquivo extends FileManager {
             } catch(IOException e) { e.printStackTrace(); }
 
         
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } 
+        } catch (FileNotFoundException e) { System.out.println(e.getMessage()); } 
+        
         return player;
+    }
+
+    public Player[] readByteBloco(Player bloco[], String path) {
+        int x = 0;
+        DataInputStream dis;
+        FileInputStream arq;
+        try {
+            arq = new FileInputStream(path);
+            dis = new DataInputStream(arq);
+        
+            while (x < 100) {
+                Player player = new Player();
+                    try{
+                        player.setId(dis.readInt());
+                        player.setName(dis.readUTF());
+                        player.setAge(dis.readInt());
+                        String[] positions = new String[2]; 
+                        positions[0] = dis.readUTF();
+                        positions[1] = dis.readUTF();
+                        player.setPositions(positions);
+                        player.setCollegeUniv(dis.readUTF());
+                        player.setActTeam(dis.readUTF());
+                        player.setPickDate(dis.readInt());
+
+
+                        // System.out.println(x + " " + player.toString());
+                    } catch(IOException e) { e.printStackTrace(); }
+                
+                
+                bloco[x++] = player;
+            }
+        } catch(FileNotFoundException e) { e.printStackTrace(); }
+        return bloco;
+    }
+    
+    public void intercalacao_balanceada(String path) {
+        Player[] bloco = new Player[100];
+        bloco = readByteBloco(bloco, path);
+        Sort sort = new Sort(bloco);
+        bloco = sort.sort(bloco);
+      
+
     }
 }
