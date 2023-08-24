@@ -40,6 +40,7 @@ public class Arquivo extends FileManager {
     public void convertCsvToBinary(String pathWriteFile) {
         DataOutputStream dos;
         FileOutputStream arq;
+        
         try {
             // BufferedReader reader = new BufferedReader(new FileReader(this.getFile()));
             File file = new File(this.getFile().getPath());
@@ -85,7 +86,6 @@ public class Arquivo extends FileManager {
             arq = new FileInputStream(path);
             dis = new DataInputStream(arq);
 
-
             try{
                 
                 player.setId(dis.readInt());
@@ -96,6 +96,7 @@ public class Arquivo extends FileManager {
                 positions[1] = dis.readUTF();
                 player.setPositions(positions);
                 player.setCollegeUniv(dis.readUTF());
+                player.setActTeam(dis.readUTF());
                 player.setPickDate(dis.readInt());
 
 
