@@ -1,6 +1,5 @@
 package src;
 
-import src.services.Sort;
 import src.utils.Arquivo;
 
 public class App {

@@ -111,7 +111,7 @@ public class Arquivo extends FileManager {
         return player;
     }
 
-    public Player[] readByteBloco(Player bloco[], String path) {
+    public Player[] readByteCluster(Player bloco[], String path) {
         int x = 0;
         DataInputStream dis;
         FileInputStream arq;
@@ -145,11 +145,15 @@ public class Arquivo extends FileManager {
     }
     
     public void intercalacao_balanceada(String path) {
-        Player[] bloco = new Player[100];
-        bloco = readByteBloco(bloco, path);
-        Sort sort = new Sort(bloco);
-        bloco = sort.sort(bloco);
-      
-
+        Player[] cluster = new Player[100];
+        cluster = readByteCluster(cluster, path);
+        cluster = Sort.sort(cluster);
+        
+        for (int i = 0; i < cluster.length; i++) {
+            System.out.println(cluster[i].toString());
+        }
     }
+
+
+    
 }

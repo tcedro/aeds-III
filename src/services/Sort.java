@@ -3,38 +3,31 @@ package src.services;
 import src.entities.Player;
 
 public class Sort {
-    public Player[] bloco;
-    
-    public Sort(Player[] bloco) {
-        this.bloco = bloco;
+    public static Player[] swap(int a, int b, Player[] cluster) {
+        Player aux = cluster[a];
+        cluster[a] = cluster[b];
+        cluster[b] = aux;
+        return cluster;
     }
 
-    public Player[] swap(int a, int b, Player[] data) {
-        Player aux = data[a];
-        data[a] = data[b];
-        data[b] = aux;
-        return data;
+    public static Player[] sort(Player[] cluster) {
+        return  quicksort(0, cluster.length-1, cluster);
     }
 
-    public Player[] sort(Player[] bloco) {
-        quicksort(0, bloco.length-1);
-        return this.bloco;
-    }
-
-    public void quicksort(int esq, int dir) {
+    public static Player[] quicksort(int esq, int dir, Player[] cluster) {
         int i = esq, j = dir;
-        int pivo = this.bloco[ (dir+esq) / 2 ].getAge();
+        int pivo = cluster[ (dir+esq) / 2 ].getAge();
         while(i <= j) {
-            while(bloco[i].getAge() < pivo) i++;
-            while(bloco[j].getAge() > pivo) j--;
+            while(cluster[i].getAge() < pivo) i++;
+            while(cluster[j].getAge() > pivo) j--;
             if(i <= j) {
-                swap(i,j,bloco);
+                swap(i,j,cluster);
                 i++;
                 j--;
             }
         }
-        if(esq < j) quicksort(esq, j);
-        if(i < dir) quicksort(i, dir);
+        if(esq < j) quicksort(esq, j, cluster);
+        if(i < dir) quicksort(i, dir, cluster);
+        return cluster;
     }
-
 }
