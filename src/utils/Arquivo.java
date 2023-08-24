@@ -1,7 +1,10 @@
 package src.utils;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -34,7 +37,7 @@ public class Arquivo extends FileManager {
 
         return new Player(name, date,age, positions, collegeUniv, actTeam);
     }
-    public void convertCsvToBinary(String pathToWrite) {
+    public void convertCsvToBinary(String pathWriteFile) {
         DataOutputStream dos;
         FileOutputStream arq;
         try {
@@ -42,7 +45,7 @@ public class Arquivo extends FileManager {
             File file = new File(this.getFile().getPath());
             RandomAccessFile raf = new RandomAccessFile(file, "r");
             
-            arq  = new FileOutputStream(pathToWrite);
+            arq  = new FileOutputStream(pathWriteFile);
             dos = new DataOutputStream(arq);
             
             String csvLine;
@@ -50,16 +53,15 @@ public class Arquivo extends FileManager {
             
             while ((csvLine = raf.readLine()) != null) {
                 Player player = parsePlayer(csvLine);
-                RandomAccessFile raf1 = new RandomAccessFile(pathToWrite, "r");
-                
+                RandomAccessFile raf1 = new RandomAccessFile(pathWriteFile, "r");
                 player.setId(i);
-                System.out.println(i++ +" " + player.toString());
                 
+                System.out.println(i++ +" " + player.toString());
                 //escrevendo no arquivo
                 //tamanho do arquivo
-                dos.writeLong(raf1.length());
+                // dos.writeLong(raf1.length());
                 //lapide
-                dos.writeChar(' ');
+                // dos.writeChar(' ');
                 dos.writeInt(player.getId());
                 dos.writeUTF(player.getName());
                 dos.writeInt(player.getAge());
@@ -70,6 +72,40 @@ public class Arquivo extends FileManager {
                 
                
             }
-        } catch(IOException e) { System.out.println(e.getMessage()); }
+            raf.close();
+            
+        } catch(IOException e) { System.out.println(e.getMessage()); } 
+    }
+
+    public Player readByteFile(String path) {
+        DataInputStream dis;
+        FileInputStream arq;
+        Player player = new Player();
+        try {
+            arq = new FileInputStream(path);
+            dis = new DataInputStream(arq);
+
+
+            try{
+                
+                player.setId(dis.readInt());
+                player.setName(dis.readUTF());
+                player.setAge(dis.readInt());
+                String[] positions = new String[2]; 
+                positions[0] = dis.readUTF();
+                positions[1] = dis.readUTF();
+                player.setPositions(positions);
+                player.setCollegeUniv(dis.readUTF());
+                player.setPickDate(dis.readInt());
+
+
+                System.out.println("leitura do arquivo: " + player.toString());
+            } catch(IOException e) { e.printStackTrace(); }
+
+        
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } 
+        return player;
     }
 }

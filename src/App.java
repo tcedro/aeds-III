@@ -22,5 +22,6 @@ public class App {
         
         Arquivo csv = new Arquivo(path);
         csv.convertCsvToBinary(path1);
+        csv.readByteFile(path1);
     }
 }
