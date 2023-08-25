@@ -19,6 +19,9 @@ public class App {
     public static void main(String[] args) {
         String path = pathConfig();
         String path1 = "src\\data\\nflPickPlayers.db";
+        String[] tmp = new String[2];
+        tmp[0] = "src\\data\\tmp\\temp1.db";
+        tmp[1] = "src\\data\\tmp\\temp2.db";
         
         Arquivo csv = new Arquivo(path);
         csv.CsvToByte(path1);

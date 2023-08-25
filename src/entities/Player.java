@@ -1,6 +1,5 @@
 package src.entities;
 
-import java.sql.Date;
 import java.util.Arrays;
 
 public class Player {

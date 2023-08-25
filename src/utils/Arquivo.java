@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import src.entities.Player;
+import src.entities.Registro;
 import src.services.Sort;
 
 public class Arquivo extends FileManager {
@@ -18,7 +19,7 @@ public class Arquivo extends FileManager {
         super(path);
     }
 
-    public static Player parsePlayer(String line) {
+    public static Registro parsePlayer(String line) {
         String[] columns = line.split(","); 
         int age = 0;
         String name = columns[3];
@@ -35,8 +36,10 @@ public class Arquivo extends FileManager {
         
         String[] positions = {columns[4], columns[5]};
         String actTeam = columns[2];
-
-        return new Player(name, date,age, positions, collegeUniv, actTeam);
+        
+        Player player = new Player(name, date, age, positions, collegeUniv, actTeam);
+        
+        return new Registro('s', 0 , player);
     }
 
     public void CsvToByte(String pathWriteFile) {
@@ -44,7 +47,6 @@ public class Arquivo extends FileManager {
         FileOutputStream arq;
         
         try {
-            // BufferedReader reader = new BufferedReader(new FileReader(this.getFile()));
             File file = new File(this.getFile().getPath());
             RandomAccessFile raf = new RandomAccessFile(file, "r");
             
@@ -55,23 +57,25 @@ public class Arquivo extends FileManager {
             int i = 0;
             
             while ((csvLine = raf.readLine()) != null) {
-                Player player = parsePlayer(csvLine);
+                Registro reg = parsePlayer(csvLine);
                 RandomAccessFile raf1 = new RandomAccessFile(pathWriteFile, "r");
-                player.setId(i);
+                reg.getPlayer().setId(i);
                 
-                System.out.println(i++ +" " + player.toString());
+                System.out.println(i++ + " " + reg.getPlayer().toString());
                 //escrevendo no arquivo
                 //tamanho do arquivo
                 // dos.writeLong(raf1.length());
                 //lapide
                 // dos.writeChar(' ');
-                dos.writeInt(player.getId());
-                dos.writeUTF(player.getName());
-                dos.writeInt(player.getAge());
-                for (String position : player.getPositions()) dos.writeUTF(position);
-                dos.writeUTF(player.getCollegeUniv());
-                dos.writeUTF(player.getActTeam());
-                dos.writeInt(player.getPickDate());
+                // dos.writeChar(reg.getLapide());
+                // dos.writeInt(reg.getSize());
+                dos.writeInt(reg.getPlayer().getId());
+                dos.writeUTF(reg.getPlayer().getName());
+                dos.writeInt(reg.getPlayer().getAge());
+                for (String position : reg.getPlayer().getPositions()) dos.writeUTF(position);
+                dos.writeUTF(reg.getPlayer().getCollegeUniv());
+                dos.writeUTF(reg.getPlayer().getActTeam());
+                dos.writeInt(reg.getPlayer().getPickDate());
                 
                
             }
@@ -83,6 +87,8 @@ public class Arquivo extends FileManager {
     public Player readByteFile(String path) {
         DataInputStream dis;
         FileInputStream arq;
+
+        
         Player player = new Player();
         try {
             arq = new FileInputStream(path);
@@ -111,49 +117,58 @@ public class Arquivo extends FileManager {
         return player;
     }
 
-    public Player[] readByteCluster(Player bloco[], String path) {
+    public Registro[] readClusterRegister(String path) {
         int x = 0;
         DataInputStream dis;
         FileInputStream arq;
+        Registro[] reg = new Registro[100];
+        
+        
         try {
             arq = new FileInputStream(path);
             dis = new DataInputStream(arq);
-        
             while (x < 100) {
                 Player player = new Player();
                     try{
-                        player.setId(dis.readInt());
-                        player.setName(dis.readUTF());
-                        player.setAge(dis.readInt());
-                        String[] positions = new String[2]; 
-                        positions[0] = dis.readUTF();
-                        positions[1] = dis.readUTF();
-                        player.setPositions(positions);
-                        player.setCollegeUniv(dis.readUTF());
-                        player.setActTeam(dis.readUTF());
-                        player.setPickDate(dis.readInt());
+                        // char lapide = dis.readChar();
+                        // if(lapide != '*') {
 
+                        //     reg[x].setSize(dis.readInt());
+                            
+                            player.setId(dis.readInt());
+                            player.setName(dis.readUTF());
+                            player.setAge(dis.readInt());
+                            String[] positions = new String[2]; 
+                            positions[0] = dis.readUTF();
+                            positions[1] = dis.readUTF();
+                            player.setPositions(positions);
+                            player.setCollegeUniv(dis.readUTF());
+                            player.setActTeam(dis.readUTF());
+                            player.setPickDate(dis.readInt());
+                            
+                            reg[x++].clone(player);
+                        // }
 
                         // System.out.println(x + " " + player.toString());
                     } catch(IOException e) { e.printStackTrace(); }
-                
-                
-                bloco[x++] = player;
             }
-        } catch(FileNotFoundException e) { e.printStackTrace(); }
-        return bloco;
+        } 
+        
+        catch(FileNotFoundException e) { e.printStackTrace(); } 
+        catch(IOException e)           { System.out.println(e.getMessage()); }
+        
+        return reg;
     }
     
     public void intercalacao_balanceada(String path) {
-        Player[] cluster = new Player[100];
-        cluster = readByteCluster(cluster, path);
+        Registro[] cluster = readClusterRegister(path);
         cluster = Sort.sort(cluster);
         
         for (int i = 0; i < cluster.length; i++) {
-            System.out.println(cluster[i].toString());
+            System.out.println("Lido: " + cluster[i].getPlayer().toString());
         }
     }
 
 
-    
+
 }
