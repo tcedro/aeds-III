@@ -162,6 +162,7 @@ public class Arquivo extends FileManager {
     }
     
     public void intercalacao_balanceada(String path) {
+        //ta lendo 100 registros do arquivo
         Registro[] bloco = readClusterRegister(path);
         // bloco = Sort.sort(bloco);
         
