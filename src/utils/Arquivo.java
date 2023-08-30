@@ -164,11 +164,12 @@ public class Arquivo extends FileManager {
     public void intercalacao_balanceada(String path) {
         //ta lendo 100 registros do arquivo
         Registro[] bloco = readClusterRegister(path);
-        // bloco = Sort.sort(bloco);
+        bloco = Sort.sort(bloco);
         
-        // for (int i = 0; i < bloco.length; i++) {
-        //     System.out.println("Lido: " + bloco[i].getPlayer().toString());
-        // }
+        //ordenando por idade
+        for (int i = 0; i < bloco.length; i++) {
+            System.out.println("ordenado: " + bloco[i].getPlayer().toString());
+        }
     }
 
 
