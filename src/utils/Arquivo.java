@@ -130,6 +130,7 @@ public class Arquivo extends FileManager {
             while (x < 100) {
                 Player player = new Player();
                     try{
+                        reg[x] = new Registro();
                         // char lapide = dis.readChar();
                         // if(lapide != '*') {
 
@@ -145,10 +146,10 @@ public class Arquivo extends FileManager {
                             player.setCollegeUniv(dis.readUTF());
                             player.setActTeam(dis.readUTF());
                             player.setPickDate(dis.readInt());
-                            
-                            reg[x++].clone(player);
+                            reg[x++].setPlayer(player);
+                            // System.out.println(x + " reg: " + reg[x].toString());
+                            // reg[x++].setPlayer(player);
                         // }
-
                         // System.out.println(x + " " + player.toString());
                     } catch(IOException e) { e.printStackTrace(); }
             }
@@ -161,12 +162,12 @@ public class Arquivo extends FileManager {
     }
     
     public void intercalacao_balanceada(String path) {
-        Registro[] cluster = readClusterRegister(path);
-        cluster = Sort.sort(cluster);
+        Registro[] bloco = readClusterRegister(path);
+        // bloco = Sort.sort(bloco);
         
-        for (int i = 0; i < cluster.length; i++) {
-            System.out.println("Lido: " + cluster[i].getPlayer().toString());
-        }
+        // for (int i = 0; i < bloco.length; i++) {
+        //     System.out.println("Lido: " + bloco[i].getPlayer().toString());
+        // }
     }
 
 

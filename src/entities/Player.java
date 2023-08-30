@@ -80,9 +80,13 @@ public class Player {
         return "Player [name=" + name + ", id=" + id + ", age=" + age + ", positions=" + Arrays.toString(positions)
                 + ", collegeUniv=" + collegeUniv + ", actTeam=" + actTeam + ", pickDate=" + pickDate + "]";
     }
-
-    
-
-    
-    
+    public void clone(Player player) {
+        this.name = player.name;
+        this.id = player.id;
+        this.age = player.age;
+        this.positions = player.positions;
+        this.collegeUniv = player.collegeUniv;
+        this.actTeam = player.actTeam;
+        this.pickDate = player.pickDate;
+    }
 }

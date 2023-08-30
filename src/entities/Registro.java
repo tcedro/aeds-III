@@ -5,7 +5,9 @@ public class Registro {
     private int size;
     private Player player;
 
-    public Registro() {}
+    public Registro() {
+        this(' ',0, null);
+    }
     public Registro(char lapide, int size, Player player) {
         this.lapide = lapide;
         this.size = size;
@@ -29,7 +31,8 @@ public class Registro {
     public void setPlayer(Player player) {
         this.player = player;
     }
-    public void clone(Player player) {
-        this.player = new Player(player.getName(),player.getPickDate() , player.getAge(), player.getPositions(), player.getCollegeUniv(), player.getActTeam());
+    @Override
+    public String toString() {
+        return "Registro [lapide=" + lapide + ", size=" + size + ", player=" + player + "]";
     }
 }
