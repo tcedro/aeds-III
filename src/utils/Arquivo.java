@@ -185,16 +185,12 @@ public class Arquivo extends FileManager {
         catch   (IOException e)           { e.printStackTrace(); } 
     }
 
-    private void separar_arquivos(String path) {
+    private void separar_arquivos(String path, String[] arqTemp) {
         Registro[] bloco = new Registro[100];
         boolean cond = false;
         DataInputStream dis;
         FileInputStream arq;
         int x = 0;
-        String numArqTemp[] = new String[2];
-        
-        numArqTemp[0] = "tmp1.txt";
-        numArqTemp[1] = "tmp2.txt";
         
         try{
             arq = new FileInputStream(path);
@@ -225,8 +221,8 @@ public class Arquivo extends FileManager {
                     } while(x < 100);
                     x--;
                     
-                    if(time % 2 == 0)   { gravarNoArquivo(Sort.sort(bloco), numArqTemp[0]);}
-                    else                { gravarNoArquivo(Sort.sort(bloco), numArqTemp[1]); }
+                    if(time % 2 == 0)   { gravarNoArquivo(Sort.sort(bloco), arqTemp[0]);}
+                    else                { gravarNoArquivo(Sort.sort(bloco), arqTemp[1]); }
                 x=0;
             }
                 
@@ -236,7 +232,13 @@ public class Arquivo extends FileManager {
     }    
 
     public void intercalacao_balanceada(String path) {
-        separar_arquivos(path);
+        String arqTemp[] = new String[4];
+        arqTemp[0] = "tmp1.txt";
+        arqTemp[1] = "tmp2.txt";
+        separar_arquivos(path, arqTemp);
+
+        
+
     
     }
 
