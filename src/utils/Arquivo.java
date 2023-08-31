@@ -123,7 +123,6 @@ public class Arquivo extends FileManager {
         FileInputStream arq;
         Registro[] reg = new Registro[100];
         
-        
         try {
             arq = new FileInputStream(path);
             dis = new DataInputStream(arq);
@@ -160,16 +159,89 @@ public class Arquivo extends FileManager {
         
         return reg;
     }
-    
-    public void intercalacao_balanceada(String path) {
-        //ta lendo 100 registros do arquivo
-        Registro[] bloco = readClusterRegister(path);
-        bloco = Sort.sort(bloco);
+
+    private void gravarNoArquivo(Registro bloco[], String path) {
+        DataOutputStream dos;
+        FileOutputStream arq;
+        int index = 0;
+        try {
+            arq = new FileOutputStream(path);
+            dos = new DataOutputStream(arq);
+            while(index < 100){
+                dos.writeInt(bloco[index].getPlayer().getId());
+                dos.writeUTF(bloco[index].getPlayer().getName());
+                dos.writeInt(bloco[index].getPlayer().getAge());
+                String pos[] = bloco[index].getPlayer().getPositions();
+                dos.writeUTF(pos[0]);
+                dos.writeUTF(pos[1]);
+                dos.writeUTF(bloco[index].getPlayer().getCollegeUniv());
+                dos.writeUTF(bloco[index].getPlayer().getActTeam());
+                dos.writeInt(bloco[index].getPlayer().getPickDate());
+            
+            }
+
+        } catch (FileNotFoundException e) { System.out.println(e.getMessage()); }
+        catch   (IOException e)           { e.printStackTrace(); }
+    }
+
+    private void separar_arquivos(String path) {
+        Registro[] bloco = new Registro[100];;
+        DataInputStream dis;
+        FileInputStream arq;
+        int x = 0;
+        String numArqTemp[] = new String[2];
         
-        //ordenando por idade
-        for (int i = 0; i < bloco.length; i++) {
-            System.out.println("ordenado: " + bloco[i].getPlayer().toString());
-        }
+        numArqTemp[0] = "tmp1.txt";
+        numArqTemp[1] = "tmp2.txt";
+        
+        try{
+            arq = new FileInputStream(path);
+            dis = new DataInputStream(arq);
+            
+            for(int time = 0; time < 8334; time++) {
+                while (x < 100) {
+                        arq = new FileInputStream(path);
+                        dis = new DataInputStream(arq);
+                        Player player = new Player();
+                            
+                        try{
+                            bloco[x] = new Registro();
+                            // char lapide = dis.readChar();
+                            // if(lapide != '*') {
+
+                            //     bloco[x].setSize(dis.readInt());
+                                        
+                            player.setId(dis.readInt());
+                            player.setName(dis.readUTF());
+                            player.setAge(dis.readInt());
+                            String[] positions = new String[2]; 
+                            positions[0] = dis.readUTF();
+                            positions[1] = dis.readUTF();
+                            player.setPositions(positions);
+                            player.setCollegeUniv(dis.readUTF());
+                            player.setActTeam(dis.readUTF());
+                            player.setPickDate(dis.readInt());
+                                
+                            bloco[x++].setPlayer(player);
+                            
+                            if(time % 2 == 0) gravarNoArquivo(bloco, numArqTemp[0]);
+                            else              gravarNoArquivo(bloco, numArqTemp[1]);
+                            
+                        } catch(IOException e) { e.printStackTrace(); }
+                    }
+                    x++;
+                }
+
+                x=0;
+            }catch(FileNotFoundException e) { e.printStackTrace(); } 
+        catch(IOException e)           { System.out.println(e.getMessage()); }
+    }    
+
+    public void intercalacao_balanceada(String path) {
+        separar_arquivos(path);
+        
+        
+
     }
 
 
