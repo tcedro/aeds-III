@@ -61,7 +61,7 @@ public class Arquivo extends FileManager {
                 RandomAccessFile raf1 = new RandomAccessFile(pathWriteFile, "r");
                 reg.getPlayer().setId(i);
                 
-                System.out.println(i++ + " " + reg.getPlayer().toString());
+                // System.out.println(i++ + " " + reg.getPlayer().toString());
                 //escrevendo no arquivo
                 //tamanho do arquivo
                 // dos.writeLong(raf1.length());
@@ -76,7 +76,6 @@ public class Arquivo extends FileManager {
                 dos.writeUTF(reg.getPlayer().getCollegeUniv());
                 dos.writeUTF(reg.getPlayer().getActTeam());
                 dos.writeInt(reg.getPlayer().getPickDate());
-                
                
             }
             raf.close();
@@ -167,6 +166,7 @@ public class Arquivo extends FileManager {
         try {
             arq = new FileOutputStream(path);
             dos = new DataOutputStream(arq);
+            
             while(index < 100){
                 dos.writeInt(bloco[index].getPlayer().getId());
                 dos.writeUTF(bloco[index].getPlayer().getName());
@@ -186,7 +186,8 @@ public class Arquivo extends FileManager {
     }
 
     private void separar_arquivos(String path) {
-        Registro[] bloco = new Registro[100];;
+        Registro[] bloco = new Registro[100];
+        boolean cond = false;
         DataInputStream dis;
         FileInputStream arq;
         int x = 0;
@@ -199,15 +200,12 @@ public class Arquivo extends FileManager {
             arq = new FileInputStream(path);
             dis = new DataInputStream(arq);
             
-            for(int time = 0; time < 8334; time++) {
-                while (x < 100) {
-                        arq = new FileInputStream(path);
-                        dis = new DataInputStream(arq);
-                        Player player = new Player();
-                            
-                        try{
-                            bloco[x] = new Registro();
-                                        
+            for(int time = 0; time < 84; time++) {
+                do {
+                    Player player = new Player();
+                    try{
+                        bloco[x] = new Registro();
+                                            
                             player.setId(dis.readInt());
                             player.setName(dis.readUTF());
                             player.setAge(dis.readInt());
@@ -218,31 +216,29 @@ public class Arquivo extends FileManager {
                             player.setCollegeUniv(dis.readUTF());
                             player.setActTeam(dis.readUTF());
                             player.setPickDate(dis.readInt());
-                                
-                            bloco[x].setPlayer(player);
-                            System.out.println(x + " gravar: " + bloco[x].getPlayer().toString());
-                            x++;
-                         
+                                    
+                            bloco[x++].setPlayer(player);
+                            System.out.println(player.getName());
                             
                         } catch(IOException e) { e.printStackTrace(); }
-                    }
-                    if(time % 2 == 0) gravarNoArquivo(bloco, numArqTemp[0]);
-                    else              gravarNoArquivo(bloco, numArqTemp[1]);
-                }
+                       
+                    } while(x < 100);
+                    x--;
+                    
+                    if(time % 2 == 0)   { gravarNoArquivo(Sort.sort(bloco), numArqTemp[0]);}
+                    else                { gravarNoArquivo(Sort.sort(bloco), numArqTemp[1]); }
+                x=0;
+            }
                 
 
-                x=0;
             }catch(FileNotFoundException e) { e.printStackTrace(); } 
         catch(IOException e)           { System.out.println(e.getMessage()); }
     }    
 
     public void intercalacao_balanceada(String path) {
         separar_arquivos(path);
-        
-        
-
+    
     }
-
 
 
 }
