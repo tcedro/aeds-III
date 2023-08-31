@@ -177,11 +177,12 @@ public class Arquivo extends FileManager {
                 dos.writeUTF(bloco[index].getPlayer().getCollegeUniv());
                 dos.writeUTF(bloco[index].getPlayer().getActTeam());
                 dos.writeInt(bloco[index].getPlayer().getPickDate());
-            
+                System.out.println("gravando elemento: " + index);
+                index++;
             }
 
         } catch (FileNotFoundException e) { System.out.println(e.getMessage()); }
-        catch   (IOException e)           { e.printStackTrace(); }
+        catch   (IOException e)           { e.printStackTrace(); } 
     }
 
     private void separar_arquivos(String path) {
@@ -206,10 +207,6 @@ public class Arquivo extends FileManager {
                             
                         try{
                             bloco[x] = new Registro();
-                            // char lapide = dis.readChar();
-                            // if(lapide != '*') {
-
-                            //     bloco[x].setSize(dis.readInt());
                                         
                             player.setId(dis.readInt());
                             player.setName(dis.readUTF());
@@ -222,15 +219,17 @@ public class Arquivo extends FileManager {
                             player.setActTeam(dis.readUTF());
                             player.setPickDate(dis.readInt());
                                 
-                            bloco[x++].setPlayer(player);
-                            
-                            if(time % 2 == 0) gravarNoArquivo(bloco, numArqTemp[0]);
-                            else              gravarNoArquivo(bloco, numArqTemp[1]);
+                            bloco[x].setPlayer(player);
+                            System.out.println(x + " gravar: " + bloco[x].getPlayer().toString());
+                            x++;
+                         
                             
                         } catch(IOException e) { e.printStackTrace(); }
                     }
-                    x++;
+                    if(time % 2 == 0) gravarNoArquivo(bloco, numArqTemp[0]);
+                    else              gravarNoArquivo(bloco, numArqTemp[1]);
                 }
+                
 
                 x=0;
             }catch(FileNotFoundException e) { e.printStackTrace(); } 
