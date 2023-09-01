@@ -1,5 +1,7 @@
 package src;
 
+import src.services.Crud;
+import src.services.Home;
 import src.services.Intercalar;
 import src.utils.Arquivo;
 
@@ -27,7 +29,8 @@ public class App {
         
         Arquivo csv = new Arquivo(path);
         csv.CsvToByte(path1);
-        Intercalar.Start();
+        // Intercalar.Start();
+        // Home.runAplicattion();
         
     }
 }

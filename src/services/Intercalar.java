@@ -19,6 +19,8 @@ public class Intercalar {
             RandomAccessFile rAccessFile = new RandomAccessFile(path, "rw");
 
             while(index < 100){
+                rAccessFile.writeChar(bloco[index].getLapide());
+                rAccessFile.writeLong(bloco[index].getSize());
                 rAccessFile.writeInt(bloco[index].getPlayer().getId());
                 rAccessFile.writeUTF(bloco[index].getPlayer().getName());
                 rAccessFile.writeInt(bloco[index].getPlayer().getAge());
@@ -91,32 +93,32 @@ public class Intercalar {
     
     }
     public static void Start() {
-        Scanner src = new Scanner(System.in);
         int opc = -1;
         String path[] = new String[2];
-        
+        Scanner src = new Scanner(System.in);
         path[0] = "tmp1.txt";
         path[1] = "tmp2.txt";
 
         while(opc != 0) {
+            System.out.println("=================== INTERCALAÇÕES ===================");
             System.out.println("0-sair");
             System.out.println("1-intercalação balanceada");
             System.out.println("2-intercalação balanceada Otimizada");
-            System.out.println("Escolha a intercalação: ");
-                    
-                    
+            System.out.print("Escolha a intercalação: ");
+            
             opc = src.nextInt();
+                    
             switch (opc) {
                 case 1:
                     System.out.println("Iniciando balanceamento");
                     intercalacao_balanceada("src\\data\\nflPickPlayers.db", path);
                 break;
-                        
                 default:
-                    src.close();
                     break;
             }
+            
         }   
+        src.close();
     }
 
 }
