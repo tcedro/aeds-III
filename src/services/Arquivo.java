@@ -31,10 +31,10 @@ public class Arquivo {
         
         Player player = new Player(name, date, age, positions, collegeUniv, actTeam);
 
-        return new Registro('s', size , player);
+        return new Registro(false, size , player);
     }
 
-    public static void CsvToByte(String pathRead, String pathWrite) {
+    public static void CsvToDB(String pathRead, String pathWrite) {
         DataOutputStream dos;
         FileOutputStream arq;
         
@@ -42,6 +42,7 @@ public class Arquivo {
             
             File file = new File(pathRead);
             RandomAccessFile raf = new RandomAccessFile(file, "r");
+            RandomAccessFile raf1 = new RandomAccessFile(pathWrite, "r");
             
             arq  = new FileOutputStream(pathWrite);
             dos = new DataOutputStream(arq);
@@ -51,12 +52,10 @@ public class Arquivo {
 
             while ((csvLine = raf.readLine()) != null) {
                 Registro reg = parsePlayer(csvLine, raf.getFilePointer());
-                RandomAccessFile raf1 = new RandomAccessFile(pathWrite, "r");
                 
                 reg.getPlayer().setId(i);
-                
                 //escrevendo no arquivo
-                dos.writeChar(reg.getLapide());
+                dos.writeBoolean(reg.getLapide());
                 dos.writeLong(reg.getSize());
                 dos.writeInt(reg.getPlayer().getId());
                 dos.writeUTF(reg.getPlayer().getName());
@@ -68,7 +67,7 @@ public class Arquivo {
                
             }
             raf.close();
-            
+            raf1.close();
         } catch(IOException e) { System.out.println(e.getMessage()); } 
     }
 }

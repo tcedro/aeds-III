@@ -19,7 +19,7 @@ public class DBConfig {
         return (getSO().indexOf("nix") >= 0 || getSO().indexOf("nux") >= 0 || getSO().indexOf("aix") > 0);
     }
     
-    public static void startDB(String pathCSV, String pathDB) { Arquivo.CsvToByte(pathDB, pathDB); }
+    public static void startDB(String pathCSV, String pathDB) { Arquivo.CsvToDB(pathCSV, pathDB); }
     public static void StartConfig() {
         String pathCSV = readPathCSVConfig();
         String pathDB = readPathDBConfig();

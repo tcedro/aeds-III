@@ -19,7 +19,7 @@ public class Intercalar {
             RandomAccessFile rAccessFile = new RandomAccessFile(path, "rw");
 
             while(index < 100){
-                rAccessFile.writeChar(bloco[index].getLapide());
+                rAccessFile.writeBoolean(bloco[index].getLapide());
                 rAccessFile.writeLong(bloco[index].getSize());
                 rAccessFile.writeInt(bloco[index].getPlayer().getId());
                 rAccessFile.writeUTF(bloco[index].getPlayer().getName());
@@ -52,8 +52,8 @@ public class Intercalar {
                     try{
                         bloco[x] = new Registro();
                         
-                        char lapide = dis.readChar();
-                        if(lapide != '*') {
+                        Boolean lapide = dis.readBoolean();
+                        if(lapide != false) {
 
                             bloco[x].setLapide(lapide);
                             bloco[x].setSize(dis.readLong());
@@ -96,6 +96,7 @@ public class Intercalar {
         int opc = -1;
         String path[] = new String[2];
         Scanner src = new Scanner(System.in);
+        
         path[0] = "tmp1.txt";
         path[1] = "tmp2.txt";
 
