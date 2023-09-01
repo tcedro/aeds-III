@@ -31,7 +31,7 @@ public class Crud {
             System.out.println("1-Criar Jogador");
             System.out.println("2-Atualizar Jogador");
             System.out.println("3-Deletar Jogador");
-             System.out.println("4-Buscar por id");
+            System.out.println("4-Buscar por id");
             switch (opc) {
             case 1:
                 break;
