@@ -1,10 +1,8 @@
-package src.utils;
+package src.services;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -12,12 +10,7 @@ import java.io.RandomAccessFile;
 import src.entities.Player;
 import src.entities.Registro;
 
-public class Arquivo extends FileManager {
-    public Arquivo() {}
-    public Arquivo(String path) {
-        super(path);
-    }
-
+public class Arquivo {
     public static Registro parsePlayer(String line, Long size) {
         String[] columns = line.split(","); 
         int age = 0;
@@ -41,16 +34,16 @@ public class Arquivo extends FileManager {
         return new Registro('s', size , player);
     }
 
-    public void CsvToByte(String pathWriteFile) {
+    public static void CsvToByte(String pathRead, String pathWrite) {
         DataOutputStream dos;
         FileOutputStream arq;
         
         try {
             
-            File file = new File(this.getFile().getPath());
+            File file = new File(pathRead);
             RandomAccessFile raf = new RandomAccessFile(file, "r");
             
-            arq  = new FileOutputStream(pathWriteFile);
+            arq  = new FileOutputStream(pathWrite);
             dos = new DataOutputStream(arq);
             
             String csvLine;
@@ -58,7 +51,7 @@ public class Arquivo extends FileManager {
 
             while ((csvLine = raf.readLine()) != null) {
                 Registro reg = parsePlayer(csvLine, raf.getFilePointer());
-                RandomAccessFile raf1 = new RandomAccessFile(pathWriteFile, "r");
+                RandomAccessFile raf1 = new RandomAccessFile(pathWrite, "r");
                 
                 reg.getPlayer().setId(i);
                 
@@ -78,48 +71,4 @@ public class Arquivo extends FileManager {
             
         } catch(IOException e) { System.out.println(e.getMessage()); } 
     }
-
-    public Registro[] lerBlocoDeRegistro(String path) {
-        int x = 0;
-        DataInputStream dis;
-        FileInputStream arq;
-        Registro[] reg = new Registro[100];
-        
-        try {
-            arq = new FileInputStream(path);
-            dis = new DataInputStream(arq);
-            while (x < 100) {
-                Player player = new Player();
-                    try{
-                        reg[x] = new Registro();
-                        char lapide = dis.readChar();
-                        if(lapide != '*') {
-
-                            reg[x].setLapide(lapide);
-                            reg[x].setSize(dis.readLong());
-                            
-                            player.setId(dis.readInt());
-                            player.setName(dis.readUTF());
-                            player.setAge(dis.readInt());
-                            String[] positions = new String[2]; 
-                            positions[0] = dis.readUTF();
-                            positions[1] = dis.readUTF();
-                            player.setPositions(positions);
-                            player.setCollegeUniv(dis.readUTF());
-                            player.setActTeam(dis.readUTF());
-                            player.setPickDate(dis.readInt());
-                            
-                            reg[x++].setPlayer(player);
-                        }
-                        // System.out.println(x + " " + player.toString());
-                    } catch(IOException e) { e.printStackTrace(); }
-            }
-        } 
-        
-        catch(FileNotFoundException e) { e.printStackTrace(); } 
-        catch(IOException e)           { System.out.println(e.getMessage()); }
-        
-        return reg;
-    }
-
 }
