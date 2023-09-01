@@ -21,6 +21,7 @@ public class App {
         String path = pathConfig();
         String path1 = "src\\data\\nflPickPlayers.db";
         String[] tmp = new String[2];
+        
         tmp[0] = "src\\data\\tmp\\temp1.db";
         tmp[1] = "src\\data\\tmp\\temp2.db";
         
@@ -28,6 +29,5 @@ public class App {
         csv.CsvToByte(path1);
         Intercalar.Start();
         
-        // Sort.Start(null);
     }
 }

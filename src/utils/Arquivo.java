@@ -11,7 +11,6 @@ import java.io.RandomAccessFile;
 
 import src.entities.Player;
 import src.entities.Registro;
-import src.services.Sort;
 
 public class Arquivo extends FileManager {
     public Arquivo() {}
@@ -19,7 +18,7 @@ public class Arquivo extends FileManager {
         super(path);
     }
 
-    public static Registro parsePlayer(String line) {
+    public static Registro parsePlayer(String line, Long size) {
         String[] columns = line.split(","); 
         int age = 0;
         String name = columns[3];
@@ -38,8 +37,8 @@ public class Arquivo extends FileManager {
         String actTeam = columns[2];
         
         Player player = new Player(name, date, age, positions, collegeUniv, actTeam);
-        
-        return new Registro('s', 0 , player);
+
+        return new Registro('s', size , player);
     }
 
     public void CsvToByte(String pathWriteFile) {
@@ -47,6 +46,7 @@ public class Arquivo extends FileManager {
         FileOutputStream arq;
         
         try {
+            
             File file = new File(this.getFile().getPath());
             RandomAccessFile raf = new RandomAccessFile(file, "r");
             
@@ -55,20 +55,16 @@ public class Arquivo extends FileManager {
             
             String csvLine;
             int i = 0;
-            
+
             while ((csvLine = raf.readLine()) != null) {
-                Registro reg = parsePlayer(csvLine);
+                Registro reg = parsePlayer(csvLine, raf.getFilePointer());
                 RandomAccessFile raf1 = new RandomAccessFile(pathWriteFile, "r");
+                
                 reg.getPlayer().setId(i);
                 
-                // System.out.println(i++ + " " + reg.getPlayer().toString());
                 //escrevendo no arquivo
-                //tamanho do arquivo
-                // dos.writeLong(raf1.length());
-                //lapide
-                // dos.writeChar(' ');
-                // dos.writeChar(reg.getLapide());
-                // dos.writeInt(reg.getSize());
+                dos.writeChar(reg.getLapide());
+                dos.writeLong(reg.getSize());
                 dos.writeInt(reg.getPlayer().getId());
                 dos.writeUTF(reg.getPlayer().getName());
                 dos.writeInt(reg.getPlayer().getAge());
@@ -83,40 +79,7 @@ public class Arquivo extends FileManager {
         } catch(IOException e) { System.out.println(e.getMessage()); } 
     }
 
-    public Player readByteFile(String path) {
-        DataInputStream dis;
-        FileInputStream arq;
-
-        
-        Player player = new Player();
-        try {
-            arq = new FileInputStream(path);
-            dis = new DataInputStream(arq);
-
-            try{
-                
-                player.setId(dis.readInt());
-                player.setName(dis.readUTF());
-                player.setAge(dis.readInt());
-                String[] positions = new String[2]; 
-                positions[0] = dis.readUTF();
-                positions[1] = dis.readUTF();
-                player.setPositions(positions);
-                player.setCollegeUniv(dis.readUTF());
-                player.setActTeam(dis.readUTF());
-                player.setPickDate(dis.readInt());
-
-
-                System.out.println("leitura do arquivo: " + player.toString());
-            } catch(IOException e) { e.printStackTrace(); }
-
-        
-        } catch (FileNotFoundException e) { System.out.println(e.getMessage()); } 
-        
-        return player;
-    }
-
-    public Registro[] readClusterRegister(String path) {
+    public Registro[] lerBlocoDeRegistro(String path) {
         int x = 0;
         DataInputStream dis;
         FileInputStream arq;
@@ -129,10 +92,11 @@ public class Arquivo extends FileManager {
                 Player player = new Player();
                     try{
                         reg[x] = new Registro();
-                        // char lapide = dis.readChar();
-                        // if(lapide != '*') {
+                        char lapide = dis.readChar();
+                        if(lapide != '*') {
 
-                        //     reg[x].setSize(dis.readInt());
+                            reg[x].setLapide(lapide);
+                            reg[x].setSize(dis.readLong());
                             
                             player.setId(dis.readInt());
                             player.setName(dis.readUTF());
@@ -144,10 +108,9 @@ public class Arquivo extends FileManager {
                             player.setCollegeUniv(dis.readUTF());
                             player.setActTeam(dis.readUTF());
                             player.setPickDate(dis.readInt());
+                            
                             reg[x++].setPlayer(player);
-                            // System.out.println(x + " reg: " + reg[x].toString());
-                            // reg[x++].setPlayer(player);
-                        // }
+                        }
                         // System.out.println(x + " " + player.toString());
                     } catch(IOException e) { e.printStackTrace(); }
             }

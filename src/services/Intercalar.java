@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Scanner;
 
 import src.entities.Player;
 import src.entities.Registro;
@@ -35,7 +36,6 @@ public class Intercalar {
 
     private static void separar_arquivos(String path, String[] arqTemp) {
         Registro[] bloco = new Registro[100];
-        boolean cond = false;
         DataInputStream dis;
         FileInputStream arq;
         int x = 0;
@@ -49,7 +49,13 @@ public class Intercalar {
                     Player player = new Player();
                     try{
                         bloco[x] = new Registro();
-                                            
+                        
+                        char lapide = dis.readChar();
+                        if(lapide != '*') {
+
+                            bloco[x].setLapide(lapide);
+                            bloco[x].setSize(dis.readLong());
+                            
                             player.setId(dis.readInt());
                             player.setName(dis.readUTF());
                             player.setAge(dis.readInt());
@@ -60,17 +66,17 @@ public class Intercalar {
                             player.setCollegeUniv(dis.readUTF());
                             player.setActTeam(dis.readUTF());
                             player.setPickDate(dis.readInt());
-                                    
-                            bloco[x++].setPlayer(player);
-                            System.out.println(player.getName());
                             
-                        } catch(IOException e) { e.printStackTrace(); }
+                            bloco[x++].setPlayer(player);
+                        }
+                        // System.out.println(x + " " + player.toString());
+                    } catch(IOException e) { e.printStackTrace(); }
                        
-                    } while(x < 100);
-                    x--;
+                } while(x < 100); x--;
                     
-                    if(time % 2 == 0)   { gravarNoArquivo(Sort.sort(bloco), arqTemp[0]);}
-                    else                { gravarNoArquivo(Sort.sort(bloco), arqTemp[1]); }
+                if(time % 2 == 0)   { gravarNoArquivo( Sort.sort(bloco), arqTemp[0] );}
+                else                { gravarNoArquivo( Sort.sort(bloco), arqTemp[1] ); }
+                
                 x=0;
             }
                 
@@ -85,29 +91,32 @@ public class Intercalar {
     
     }
     public static void Start() {
-        int opc = 0;
+        Scanner src = new Scanner(System.in);
+        int opc = -1;
         String path[] = new String[2];
         
         path[0] = "tmp1.txt";
         path[1] = "tmp2.txt";
-        
-        System.out.println("Escolha a intercalação:");
-        System.out.println("1-intercalação balanceada");
-        System.out.println("2-intercalação balanceada Otimizada");
-        
-        switch (opc) {
-            case 0:
-                System.out.println("Iniciando balanceamento");
-                intercalacao_balanceada("src\\data\\nflPickPlayers.db", path);
+
+        while(opc != 0) {
+            System.out.println("0-sair");
+            System.out.println("1-intercalação balanceada");
+            System.out.println("2-intercalação balanceada Otimizada");
+            System.out.println("Escolha a intercalação: ");
+                    
+                    
+            opc = src.nextInt();
+            switch (opc) {
+                case 1:
+                    System.out.println("Iniciando balanceamento");
+                    intercalacao_balanceada("src\\data\\nflPickPlayers.db", path);
                 break;
-            case 1:
-                
-                break;
-        
-            default:
-                break;
-        }
-        separar_arquivos("src\\data\\nflPickPlayers.db", path);
+                        
+                default:
+                    src.close();
+                    break;
+            }
+        }   
     }
 
 }

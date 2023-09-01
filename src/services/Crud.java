@@ -1,12 +1,10 @@
 package src.services;
 
 import java.util.Scanner;
-
 import src.entities.Player;
 
 public class Crud {
-
-    public Player create() {
+    public static Player create() {
         Player player = new Player();
         Scanner src = new Scanner(System.in);
         
@@ -20,7 +18,7 @@ public class Crud {
         player.setCollegeUniv(src.nextLine());
         
         src.close();
-
+       
         return player;
     }
 
@@ -45,6 +43,5 @@ public class Crud {
                 break;
             }
         }
-
     }
 }
