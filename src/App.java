@@ -1,5 +1,6 @@
 package src;
 
+import src.services.Intercalar;
 import src.utils.Arquivo;
 
 public class App {
@@ -25,7 +26,7 @@ public class App {
         
         Arquivo csv = new Arquivo(path);
         csv.CsvToByte(path1);
-        csv.intercalacao_balanceada(path1);
+        Intercalar.Start();
         
         // Sort.Start(null);
     }
