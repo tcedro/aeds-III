@@ -17,21 +17,17 @@ public class Arquivo {
         String name = columns[3];
         String collegeUniv = "";
         int date = Integer.parseInt(columns[0]);
-        //Corrigir tuplas sem colunas.
-        try{
-            if(columns[6] != "") age = Integer.parseInt(columns[6]);
-        }  catch(ArrayIndexOutOfBoundsException e) { age = 0; }
         
-        try {
-           collegeUniv = columns[7];
-        } catch (ArrayIndexOutOfBoundsException e) { collegeUniv = "Nill"; }    
+        //Corrigir tuplas sem colunas.
+        try { if(columns[6] != "") age = Integer.parseInt(columns[6]); }  
+        catch(ArrayIndexOutOfBoundsException e) { age = 0; }
+        try { collegeUniv = columns[7]; } 
+        catch (ArrayIndexOutOfBoundsException e) { collegeUniv = "Nill"; }    
         
         String[] positions = {columns[4], columns[5]};
         String actTeam = columns[2];
-        
-        Player player = new Player(name, date, age, positions, collegeUniv, actTeam);
 
-        return new Registro(true, size , player);
+        return new Registro(true, size , new Player(name, date, age, positions, collegeUniv, actTeam));
     }
 
     public static void CsvToDB(String pathRead, String pathWrite) {
@@ -42,7 +38,6 @@ public class Arquivo {
             
             File file = new File(pathRead);
             RandomAccessFile raf = new RandomAccessFile(file, "r");
-            RandomAccessFile raf1 = new RandomAccessFile(pathWrite, "r");
             
             arq  = new FileOutputStream(pathWrite);
             dos = new DataOutputStream(arq);
@@ -54,7 +49,6 @@ public class Arquivo {
                 Registro reg = parsePlayer(csvLine, raf.getFilePointer());
                 
                 reg.getPlayer().setId(i);
-                //escrevendo no arquivo
                 dos.writeBoolean(reg.getLapide());
                 dos.writeLong(reg.getSize());
                 dos.writeInt(reg.getPlayer().getId());
@@ -66,8 +60,8 @@ public class Arquivo {
                 dos.writeInt(reg.getPlayer().getPickDate());
                
             }
+            
             raf.close();
-            raf1.close();
         } catch(IOException e) { System.out.println(e.getMessage()); } 
     }
 }

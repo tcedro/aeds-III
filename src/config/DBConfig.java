@@ -10,7 +10,7 @@ public class DBConfig {
         return isWindows()? "src\\data\\nfl_draft.csv":"src/data/nfl_draft.csv";
     }
     public static String readPathDBConfig() {
-        return isWindows()? "src\\data\\nflPickPlayers.db":"src/data/nflPickPlayers.db";
+        return isWindows()? "src\\data\\nflPlayers.db":"src/data/nflPlayers.db";
     }
     public static boolean isWindows() {
         return (getSO().indexOf("win") >= 0);
