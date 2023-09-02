@@ -36,7 +36,7 @@ public class Intercalar {
         catch   (IOException e)           { e.printStackTrace(); }
     }
 
-    private static void separar_arquivos(String path, String[] arqTemp) {
+    private static void distribuicao(String path, String[] arqTemp) {
         Registro[] bloco = new Registro[100];
         DataInputStream dis;
         FileInputStream arq;
@@ -86,9 +86,44 @@ public class Intercalar {
             }catch(FileNotFoundException e) { e.printStackTrace(); } 
         catch(IOException e)           { System.out.println(e.getMessage()); }
     }    
+    private static void intercalar(String pathRead[], String pathWrite[]) {
+        try{
+            RandomAccessFile raf1 = new RandomAccessFile(pathRead[0], "r");
+            RandomAccessFile raf2 = new RandomAccessFile(pathRead[1], "r");
+            RandomAccessFile raf3 = new RandomAccessFile(pathWrite[0], "rw");
+            
+            while(raf1.getFilePointer() < raf1.length()) {
+                Boolean lapide = raf1.readBoolean();
+                lapide  = raf2.readBoolean();
 
+                Long size1 = raf1.readLong();
+                Long size2 = raf2.readLong();
+
+                int id1 = raf1.readInt();
+                int id2 = raf2.readInt();
+                if(id1 < id2) {
+                    /* */
+                }
+            }
+
+
+
+
+
+
+        } 
+        catch(FileNotFoundException e) { e.printStackTrace();}
+        catch(IllegalArgumentException e) { System.out.println(e.getMessage()); }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+       
+
+
+
+    }
     public static void intercalacao_balanceada(String db, String[] path) {
-        separar_arquivos(db, path);
+        distribuicao(db, path);
         
     
     }

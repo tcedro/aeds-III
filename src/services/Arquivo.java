@@ -31,7 +31,7 @@ public class Arquivo {
         
         Player player = new Player(name, date, age, positions, collegeUniv, actTeam);
 
-        return new Registro(false, size , player);
+        return new Registro(true, size , player);
     }
 
     public static void CsvToDB(String pathRead, String pathWrite) {
