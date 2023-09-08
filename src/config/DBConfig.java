@@ -23,7 +23,6 @@ public class DBConfig {
     public static void StartConfig() {
         String pathCSV = readPathCSVConfig();
         String pathDB = readPathDBConfig();
-        
         System.out.println("INICIALIZANDO APLICAÇÃO");
         startDB(pathCSV, pathDB);
     }

@@ -4,7 +4,7 @@ import java.util.Scanner;
 import src.entities.Player;
 
 public class Crud {
-    public static Player create() {
+    public static Player createPlayer() {
         Player player = new Player();
         Scanner src = new Scanner(System.in);
         
@@ -29,6 +29,9 @@ public class Crud {
        
         return player;
     }
+    public static void deletePlayer(int id) {
+        
+    }
 
     public static void Start() {
         int opc = 0;
@@ -40,9 +43,8 @@ public class Crud {
             System.out.println("4-Buscar por id");
             switch (opc) {
             case 1:
-                Boolean resp = Arquivo.salvarNovoRegistro(create());
-                if(resp) { System.out.println("JOGADOR SALVO EM ARQUIVO!");}
-                else { System.out.println("ERROR:OPERAÇÃO FALHOU! TENTE NOVAMENTE MAIS TARDE"); }
+                try { Arquivo.salvarNovoRegistro(createPlayer()); } 
+                catch(Exception e) { System.out.println(e.getMessage()); }
                 break;
             case 2:
                 break;

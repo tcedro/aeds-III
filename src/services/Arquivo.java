@@ -65,8 +65,7 @@ public class Arquivo {
         } catch(IOException e) { System.out.println(e.getMessage()); } 
     }
 
-    public static Boolean salvarNovoRegistro(Player player) {
-        Boolean status = true;
+    public static void salvarNovoRegistro(Player player) throws Exception{
         Registro registro = new Registro(true, 0L, player);
         try {
             RandomAccessFile raf = new RandomAccessFile("src\\data\\nflPlayers.db", "rw");
@@ -83,12 +82,12 @@ public class Arquivo {
             raf.writeUTF(registro.getPlayer().getActTeam());
             raf.writeInt(registro.getPlayer().getPickDate());
 
-
+            raf.close();
+        
         }catch (IOException e) {
             System.out.println(e.getMessage());
-            return false;
-        }
-        
-        return status;
+            throw new Exception("Error: operação de novo jogador falhou!");
+        } 
+    
     }
 }
