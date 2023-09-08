@@ -16,6 +16,14 @@ public class Crud {
         player.setAge(src.nextInt());
         System.out.println("Insira a universidade do jogador: ");
         player.setCollegeUniv(src.nextLine());
+        System.out.println("Insira a posição de origem do jogador: ");
+        String pos[] = new String[2];
+        pos[0] = src.nextLine();
+        System.out.println("Insira a posição atual do jogador: ");
+        pos[1] = src.nextLine();
+        player.setPositions(pos);
+        System.out.println("Insira o time do pick: ");
+        player.setActTeam(src.nextLine());
         
         src.close();
        
@@ -32,6 +40,9 @@ public class Crud {
             System.out.println("4-Buscar por id");
             switch (opc) {
             case 1:
+                Boolean resp = Arquivo.salvarNovoRegistro(create());
+                if(resp) { System.out.println("JOGADOR SALVO EM ARQUIVO!");}
+                else { System.out.println("ERROR:OPERAÇÃO FALHOU! TENTE NOVAMENTE MAIS TARDE"); }
                 break;
             case 2:
                 break;

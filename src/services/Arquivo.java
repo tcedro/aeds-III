@@ -64,4 +64,31 @@ public class Arquivo {
             raf.close();
         } catch(IOException e) { System.out.println(e.getMessage()); } 
     }
+
+    public static Boolean salvarNovoRegistro(Player player) {
+        Boolean status = true;
+        Registro registro = new Registro(true, 0L, player);
+        try {
+            RandomAccessFile raf = new RandomAccessFile("src\\data\\nflPlayers.db", "rw");
+
+            raf.seek(raf.length());
+
+            raf.writeBoolean(registro.getLapide());
+            raf.writeLong(registro.getSize());
+            raf.writeInt(registro.getPlayer().getId());
+            raf.writeUTF(registro.getPlayer().getName());
+            raf.writeInt(registro.getPlayer().getAge());
+            for (String position : registro.getPlayer().getPositions()) raf.writeUTF(position);
+            raf.writeUTF(registro.getPlayer().getCollegeUniv());
+            raf.writeUTF(registro.getPlayer().getActTeam());
+            raf.writeInt(registro.getPlayer().getPickDate());
+
+
+        }catch (IOException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        
+        return status;
+    }
 }

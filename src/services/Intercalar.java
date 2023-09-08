@@ -92,6 +92,7 @@ public class Intercalar {
             RandomAccessFile raf2 = new RandomAccessFile(pathRead[1], "r");
             RandomAccessFile raf3 = new RandomAccessFile(pathWrite[0], "rw");
             
+            Registro segmento1 = raf1.read
 
 
         } 
