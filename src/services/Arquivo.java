@@ -88,6 +88,19 @@ public class Arquivo {
             System.out.println(e.getMessage());
             throw new Exception("Error: operação de novo jogador falhou!");
         } 
-    
+    }
+
+    public static void deletarRegistro(int id) throws Exception {
+        Registro registro = new Registro();
+        boolean status = false;
+        try {
+            RandomAccessFile raf = new RandomAccessFile("src\\data\\nflPlayers.db", "rw");
+            
+            while(raf.getFilePointer() < raf.length() || status == false) {
+                String line = raf.readLine();
+                if(){}
+            }
+            
+        } catch(IOException e) { throw new Exception("ERROR: operação de deletar jogador"); }
     }
 }
