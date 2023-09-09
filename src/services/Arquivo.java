@@ -98,9 +98,31 @@ public class Arquivo {
             
             while(raf.getFilePointer() < raf.length() || status == false) {
                 String line = raf.readLine();
-                if(){}
             }
             
         } catch(IOException e) { throw new Exception("ERROR: operação de deletar jogador"); }
     }
+
+
+    public static void gravarNoArquivoIntercalacao(String path, Registro registro) {
+        RandomAccessFile raf;
+        try {       
+            raf = new RandomAccessFile(path, "rw");
+            raf.seek(raf.length());
+
+            raf.writeBoolean(registro.getLapide());
+            raf.writeLong(registro.getSize());
+            raf.writeInt(registro.getPlayer().getId());
+            raf.writeUTF(registro.getPlayer().getName());
+            raf.writeInt(registro.getPlayer().getAge());
+            for (String position : registro.getPlayer().getPositions()) raf.writeUTF(position);
+            raf.writeUTF(registro.getPlayer().getCollegeUniv());
+            raf.writeUTF(registro.getPlayer().getActTeam());
+            raf.writeInt(registro.getPlayer().getPickDate());
+
+            raf.close();            
+        
+        } catch(IOException e) { System.out.println(e.getMessage());  } 
+    }
+
 }

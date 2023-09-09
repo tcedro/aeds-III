@@ -36,7 +36,7 @@ public class Crud {
         return player;
     }
     public static void deletePlayer(int id) throws Exception{
-        Arquivo.deletarRegistro
+        Arquivo.deletarRegistro(id);
     }
 
     public static void Start() {
@@ -59,6 +59,8 @@ public class Crud {
             case 2:
                 break;
             case 3:
+                try { deletePlayer(opc);}
+                catch (Exception e) { System.out.println(e.getMessage()); }
                 break;
             case 4:
                 break;

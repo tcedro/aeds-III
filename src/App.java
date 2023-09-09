@@ -12,7 +12,7 @@ public class App {
         DBConfig.StartConfig(); 
         // Home.runAplicattion();
         String path[] = new String[2];
-        Crud.Start();
+        Intercalar.Start();
 
     }
 }

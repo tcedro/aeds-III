@@ -86,28 +86,68 @@ public class Intercalar {
             }catch(FileNotFoundException e) { e.printStackTrace(); } 
         catch(IOException e)           { System.out.println(e.getMessage()); }
     }    
-    private static void intercalar(String pathRead[], String pathWrite[]) {
+    private static void intercalar(String pathRead[], String pathWrite) {
+        RandomAccessFile raf1, raf2;
+        Registro bloco1 = new Registro(), bloco2 = new Registro();
+
         try{
-            RandomAccessFile raf1 = new RandomAccessFile(pathRead[0], "r");
-            RandomAccessFile raf2 = new RandomAccessFile(pathRead[1], "r");
-            RandomAccessFile raf3 = new RandomAccessFile(pathWrite[0], "rw");
+            raf1 = new RandomAccessFile(pathRead[0], "r");
+            raf2 = new RandomAccessFile(pathRead[1], "r");
             
+            while(raf1.getFilePointer() < raf1.length() || raf2.getFilePointer() < raf2.length())  { 
+                //ler registro do primeiro arquivo
+                    boolean lapide0 = raf1.readBoolean();
+                    if(lapide0 != false) {
+                        bloco1.setLapide(lapide0);
+                        bloco1.setSize(raf1.readLong());
+                        bloco1.getPlayer().setId(raf1.readInt());
+                        bloco1.getPlayer().setName(raf1.readUTF());
+                        bloco1.getPlayer().setAge(raf1.readInt());
+                        String[] positions = new String[2]; 
+                        positions[0] = raf1.readUTF();
+                        positions[1] = raf1.readUTF();
+                        bloco1.getPlayer().setPositions(positions);
+                        bloco1.getPlayer().setCollegeUniv(raf1.readUTF());
+                        bloco1.getPlayer().setActTeam(raf1.readUTF());
+                        bloco1.getPlayer().setPickDate(raf1.readInt());
+                    }
+                
+                //ler registro do segundo arquivo
+                boolean lapide1 = raf2.readBoolean();
+                    if(lapide1 != false) {
+                        bloco2.setLapide(lapide1);
+                        bloco2.setSize(raf2.readLong());
+                        bloco2.getPlayer().setId(raf2.readInt());
+                        bloco2.getPlayer().setName(raf2.readUTF());
+                        bloco2.getPlayer().setAge(raf2.readInt());
+                        String[] positions = new String[2]; 
+                        positions[0] = raf2.readUTF();
+                        positions[1] = raf2.readUTF();
+                        bloco2.getPlayer().setPositions(positions);
+                        bloco2.getPlayer().setCollegeUniv(raf2.readUTF());
+                        bloco2.getPlayer().setActTeam(raf2.readUTF());
+                        bloco2.getPlayer().setPickDate(raf2.readInt());
+                    }
+
+                //intercala no 3 arquivo
+                if(bloco1.getPlayer().getId() <= bloco2.getPlayer().getId()) { Arquivo.gravarNoArquivoIntercalacao(pathWrite, bloco1); }
+                else { Arquivo.gravarNoArquivoIntercalacao(pathWrite, bloco2); }
+
+            }
             
-
-
+            raf1.close();
+            raf2.close();
         } 
-        
-        catch(FileNotFoundException e) { e.printStackTrace();}
-        catch(IllegalArgumentException e) { System.out.println(e.getMessage()); }
-        catch(IOException e) { e.printStackTrace(); }
-
+        catch(FileNotFoundException e)      { e.printStackTrace();}
+        catch(IllegalArgumentException e)   { e.printStackTrace(); }
+        catch(IOException e)                { System.out.println(e.getMessage()); }
 
     }
     public static void intercalacao_balanceada(String db, String[] path) {
         distribuicao(db, path);
-        
-    
+        intercalar(path, "src\\data\\nflPlayers.db");
     }
+
     public static void Start() {
         int opc = -1;
         String path[] = new String[2];
