@@ -149,9 +149,11 @@ public class Intercalar {
         catch(IOException e)                { System.out.println(e.getMessage()); }
 
     }
-    public static void intercalacao_balanceada(String db, String[] path) {
-        distribuicao(db, path);
-        intercalar(path, "src\\data\\nflPlayers.db");
+    public static void intercalacao_balanceada(String db, String[] path) throws Exception {
+        try{
+            distribuicao(db, path);
+            intercalar(path, "src\\data\\nflPlayers.db");
+        } catch(Exception e) { throw new Exception("ERROR:Intercalação falhou."); }
     }
 
     public static void Start() {
@@ -174,8 +176,10 @@ public class Intercalar {
             switch (opc) {
                 case 1:
                     System.out.println("Iniciando balanceamento");
-                    intercalacao_balanceada("src\\data\\nflPlayers.db", path);
-                break;
+                    try{ intercalacao_balanceada("src\\data\\nflPlayers.db", path); } 
+                    catch(Exception e) { System.out.println(e.getMessage()); }
+                    break;
+                
                 default:
                     break;
             }
