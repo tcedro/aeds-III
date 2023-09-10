@@ -14,24 +14,26 @@ import src.entities.Registro;
 
 public class Intercalar {
     private static void gravarNoArquivo(Registro bloco[], String path) {
+        RandomAccessFile raf;
         int index = 0;
         try {
-            RandomAccessFile rAccessFile = new RandomAccessFile(path, "rw");
-
+            raf = new RandomAccessFile(path, "rws");
+            raf.seek(raf.length());
             while(index < 100){
-                rAccessFile.writeBoolean(bloco[index].getLapide());
-                rAccessFile.writeLong(bloco[index].getSize());
-                rAccessFile.writeInt(bloco[index].getPlayer().getId());
-                rAccessFile.writeUTF(bloco[index].getPlayer().getName());
-                rAccessFile.writeInt(bloco[index].getPlayer().getAge());
+                raf.writeBoolean(bloco[index].getLapide());
+                raf.writeLong(bloco[index].getSize());
+                raf.writeInt(bloco[index].getPlayer().getId());
+                raf.writeUTF(bloco[index].getPlayer().getName());
+                raf.writeInt(bloco[index].getPlayer().getAge());
                 String pos[] = bloco[index].getPlayer().getPositions();
-                rAccessFile.writeUTF(pos[0]);
-                rAccessFile.writeUTF(pos[1]);
-                rAccessFile.writeUTF(bloco[index].getPlayer().getCollegeUniv());
-                rAccessFile.writeUTF(bloco[index].getPlayer().getActTeam());
-                rAccessFile.writeInt(bloco[index++].getPlayer().getPickDate());
+                raf.writeUTF(pos[0]);
+                raf.writeUTF(pos[1]);
+                raf.writeUTF(bloco[index].getPlayer().getCollegeUniv());
+                raf.writeUTF(bloco[index].getPlayer().getActTeam());
+                raf.writeInt(bloco[index++].getPlayer().getPickDate());
             }
-
+        
+            raf.close();
         } catch (FileNotFoundException e) { System.out.println(e.getMessage()); }
         catch   (IOException e)           { e.printStackTrace(); }
     }
@@ -41,11 +43,10 @@ public class Intercalar {
         DataInputStream dis;
         FileInputStream arq;
         int x = 0;
-        
+        int value = 0;
         try{
             arq = new FileInputStream(path);
             dis = new DataInputStream(arq);
-            
             for(int time = 0; time < 84; time++) {
                 do {
                     Player player = new Player();
@@ -68,10 +69,8 @@ public class Intercalar {
                             player.setCollegeUniv(dis.readUTF());
                             player.setActTeam(dis.readUTF());
                             player.setPickDate(dis.readInt());
-                            
                             bloco[x++].setPlayer(player);
                         }
-                        // System.out.println(x + " " + player.toString());
                     } catch(IOException e) { e.printStackTrace(); }
                        
                 } while(x < 100); x--;
@@ -82,10 +81,10 @@ public class Intercalar {
                 x=0;
             }
                 
-
             }catch(FileNotFoundException e) { e.printStackTrace(); } 
-        catch(IOException e)           { System.out.println(e.getMessage()); }
+        catch(Exception e)           { System.out.println(e.getMessage()); }
     }    
+    
     private static void intercalar(String pathRead[], String pathWrite) {
         RandomAccessFile raf1, raf2;
         Registro bloco1 = new Registro(), bloco2 = new Registro();
@@ -93,8 +92,9 @@ public class Intercalar {
         try{
             raf1 = new RandomAccessFile(pathRead[0], "r");
             raf2 = new RandomAccessFile(pathRead[1], "r");
-            
+            raf1.seek(0); raf2.seek(0);
             while(raf1.getFilePointer() < raf1.length() || raf2.getFilePointer() < raf2.length())  { 
+
                 //ler registro do primeiro arquivo
                     boolean lapide0 = raf1.readBoolean();
                     if(lapide0 != false) {
@@ -112,9 +112,10 @@ public class Intercalar {
                             bloco1.getPlayer().setActTeam(raf1.readUTF());
                             bloco1.getPlayer().setPickDate(raf1.readInt());
                         
+                            System.out.println("bloco 1" + bloco1.getPlayer().toString());
                         } catch(NullPointerException e) { bloco1.getPlayer().setId(-1); }
                     }
-                
+                    
                     //ler registro do segundo arquivo
                     boolean lapide1 = raf2.readBoolean();
                     if(lapide1 != false) {
@@ -131,6 +132,7 @@ public class Intercalar {
                             bloco2.getPlayer().setCollegeUniv(raf2.readUTF());
                             bloco2.getPlayer().setActTeam(raf2.readUTF());
                             bloco2.getPlayer().setPickDate(raf2.readInt());
+                            System.out.println("bloco 2" + bloco2.getPlayer().toString());
                         
                         } catch(NullPointerException e) { bloco2.getPlayer().setId(-1); }
                     }

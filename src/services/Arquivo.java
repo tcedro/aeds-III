@@ -58,7 +58,7 @@ public class Arquivo {
                 dos.writeUTF(reg.getPlayer().getCollegeUniv());
                 dos.writeUTF(reg.getPlayer().getActTeam());
                 dos.writeInt(reg.getPlayer().getPickDate());
-               
+                i++;
             }
             
             raf.close();
