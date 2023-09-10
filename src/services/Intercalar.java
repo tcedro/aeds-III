@@ -2,6 +2,7 @@ package src.services;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -88,6 +89,7 @@ public class Intercalar {
     private static void intercalar(String pathRead[], String pathWrite) {
         RandomAccessFile raf1, raf2;
         Registro bloco1 = new Registro(), bloco2 = new Registro();
+        int contandor = 0;
 
         try{
             raf1 = new RandomAccessFile(pathRead[0], "r");
@@ -138,9 +140,10 @@ public class Intercalar {
                     }
 
                 //intercala no 3 arquivo
+   
                 if(bloco1.getPlayer().getId() <= bloco2.getPlayer().getId()) { Arquivo.gravarNoArquivoIntercalacao(pathWrite, bloco1); }
                 else { Arquivo.gravarNoArquivoIntercalacao(pathWrite, bloco2); }
-
+                contandor++;
             }
             
             raf1.close();
@@ -166,6 +169,9 @@ public class Intercalar {
         path[0] = "tmp1.txt";
         path[1] = "tmp2.txt";
 
+        File file1 = new File(path[0]);
+        File file2 = new File(path[1]);
+        
         while(opc != 0) {
             System.out.println("=================== INTERCALAÇÕES ===================");
             System.out.println("0-sair");
@@ -180,6 +186,8 @@ public class Intercalar {
                     System.out.println("Iniciando balanceamento");
                     try{ intercalacao_balanceada("src\\data\\nflPlayers.db", path); } 
                     catch(Exception e) { System.out.println(e.getMessage()); }
+                    file2.delete();
+                    file1.delete();
                     break;
                 
                 default:

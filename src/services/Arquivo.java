@@ -107,7 +107,7 @@ public class Arquivo {
     public static void gravarNoArquivoIntercalacao(String path, Registro registro) {
         RandomAccessFile raf;
         try {       
-            raf = new RandomAccessFile(path, "rw");
+            raf = new RandomAccessFile(path, "rws");
             raf.seek(raf.length());
 
             raf.writeBoolean(registro.getLapide());
