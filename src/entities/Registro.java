@@ -6,7 +6,7 @@ public class Registro {
     private Player player;
 
     public Registro() {
-        this(false, 0L, null);
+        this(false, 0L, new Player());
     }
     public Registro(Boolean lapide, Long size, Player player) {
         this.lapide = lapide;

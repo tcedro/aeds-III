@@ -98,35 +98,41 @@ public class Intercalar {
                 //ler registro do primeiro arquivo
                     boolean lapide0 = raf1.readBoolean();
                     if(lapide0 != false) {
-                        bloco1.setLapide(lapide0);
-                        bloco1.setSize(raf1.readLong());
-                        bloco1.getPlayer().setId(raf1.readInt());
-                        bloco1.getPlayer().setName(raf1.readUTF());
-                        bloco1.getPlayer().setAge(raf1.readInt());
-                        String[] positions = new String[2]; 
-                        positions[0] = raf1.readUTF();
-                        positions[1] = raf1.readUTF();
-                        bloco1.getPlayer().setPositions(positions);
-                        bloco1.getPlayer().setCollegeUniv(raf1.readUTF());
-                        bloco1.getPlayer().setActTeam(raf1.readUTF());
-                        bloco1.getPlayer().setPickDate(raf1.readInt());
+                        try{
+                            bloco1.setLapide(lapide0);
+                            bloco1.setSize(raf1.readLong());
+                            bloco1.getPlayer().setId(raf1.readInt());
+                            bloco1.getPlayer().setName(raf1.readUTF());
+                            bloco1.getPlayer().setAge(raf1.readInt());
+                            String[] positions = new String[2]; 
+                            positions[0] = raf1.readUTF();
+                            positions[1] = raf1.readUTF();
+                            bloco1.getPlayer().setPositions(positions);
+                            bloco1.getPlayer().setCollegeUniv(raf1.readUTF());
+                            bloco1.getPlayer().setActTeam(raf1.readUTF());
+                            bloco1.getPlayer().setPickDate(raf1.readInt());
+                        
+                        } catch(NullPointerException e) { bloco1.getPlayer().setId(-1); }
                     }
                 
-                //ler registro do segundo arquivo
-                boolean lapide1 = raf2.readBoolean();
+                    //ler registro do segundo arquivo
+                    boolean lapide1 = raf2.readBoolean();
                     if(lapide1 != false) {
-                        bloco2.setLapide(lapide1);
-                        bloco2.setSize(raf2.readLong());
-                        bloco2.getPlayer().setId(raf2.readInt());
-                        bloco2.getPlayer().setName(raf2.readUTF());
-                        bloco2.getPlayer().setAge(raf2.readInt());
-                        String[] positions = new String[2]; 
-                        positions[0] = raf2.readUTF();
-                        positions[1] = raf2.readUTF();
-                        bloco2.getPlayer().setPositions(positions);
-                        bloco2.getPlayer().setCollegeUniv(raf2.readUTF());
-                        bloco2.getPlayer().setActTeam(raf2.readUTF());
-                        bloco2.getPlayer().setPickDate(raf2.readInt());
+                        try {
+                            bloco2.setLapide(lapide1);
+                            bloco2.setSize(raf2.readLong());
+                            bloco2.getPlayer().setId(raf2.readInt());
+                            bloco2.getPlayer().setName(raf2.readUTF());
+                            bloco2.getPlayer().setAge(raf2.readInt());
+                            String[] positions = new String[2]; 
+                            positions[0] = raf2.readUTF();
+                            positions[1] = raf2.readUTF();
+                            bloco2.getPlayer().setPositions(positions);
+                            bloco2.getPlayer().setCollegeUniv(raf2.readUTF());
+                            bloco2.getPlayer().setActTeam(raf2.readUTF());
+                            bloco2.getPlayer().setPickDate(raf2.readInt());
+                        
+                        } catch(NullPointerException e) { bloco2.getPlayer().setId(-1); }
                     }
 
                 //intercala no 3 arquivo
