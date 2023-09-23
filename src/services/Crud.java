@@ -52,24 +52,29 @@ public class Crud {
         else { System.out.println("REGISTRO NAO ENCONTRADO!"); }
     }
 
+    private static String readNewTeam() {
+        System.out.println("Novo Time:");
+        String name = src.nextLine();
+        return name;
+    }
 
     public static void atualizarPlayer() {
-        System.out.println("Entre com id para alterar nome: ");
-        int id = src.nextInt();
+        String novoTime = readNewTeam();
         
+        System.out.println("Entre com id para alterar time atual: ");
+        int id = src.nextInt();
+
         Player target = Arquivo.procurarRegistroCrud(id);
+        System.out.println("Jogador: " + target.getName());
+        System.out.println("Time atual: " + target.getActTeam());
 
-        System.out.print("NOVO NOME: ");
-        String name = src.nextLine();
+        target.setActTeam(novoTime); 
 
-        target.setName(name); 
         boolean stat = Arquivo.atualizarRegistroPlayer(target);   
-                    
         if(stat) {
-            System.out.println("Sucesso!");
-            System.out.println(Arquivo.procurarRegistroCrud(id).toString()); 
+            System.out.println("Concluido");
         }
-        else System.out.println("error: Ao atualizar jogador!");
+        else System.out.println("ERROR:Ao atualizar jogador");
     }
 
     public static void deletarPlayer() {

@@ -123,7 +123,6 @@ public class Arquivo {
             dos = new DataInputStream(fis);
             
             int ultimoID = dos.readInt();
-            System.out.println(ultimoID);
             byte[] regBytes;
 
             while(cout < ultimoID) {
@@ -142,13 +141,13 @@ public class Arquivo {
 
                 cout++;
             }
-            dos.close();
             fis.close();
+            dos.close();
 
         }
         catch(FileNotFoundException e) {e.printStackTrace();}
         catch(IOException e) { e.printStackTrace(); }
-       
+
         return null;
     }
 
@@ -189,10 +188,17 @@ public class Arquivo {
                         
                         } else {
                             System.out.println("Registro foi gravado no final ");
-                            raf.seek(raf.length());
-                            raf.write(regBytes);
-                            raf.seek(pos-2L);
-                            raf.writeBoolean(true);
+                            deletarRegistroPlayer(target.getId());
+                            if(cout == ultimoID) {
+                                raf.seek(raf.length()-1);
+                                raf.writeInt(regBytes.length);
+                                raf.write(regBytes);
+                            } else {
+                                raf.seek(raf.length());
+                                raf.writeBoolean(false);
+                                raf.writeInt(regBytes.length);
+                                raf.write(regBytes);                            
+                            }
                         
                         }
 
