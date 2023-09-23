@@ -5,6 +5,12 @@ import src.entities.Player;
 
 public class Crud {
     public static final Scanner src = new Scanner(System.in);
+
+    public static void criarPlayer() {
+        Player target = createPlayer();
+        Arquivo.gravarNovoRegistroCrud(target);
+    }
+    
     public static Player createPlayer() {
         Player player = new Player();
         String pos1, pos2;
@@ -47,63 +53,73 @@ public class Crud {
     }
 
 
-    public static void atualizarPlayer(int id) {
+    public static void atualizarPlayer() {
+        System.out.println("Entre com id para alterar nome: ");
+        int id = src.nextInt();
+        
         Player target = Arquivo.procurarRegistroCrud(id);
 
-        System.out.println("NOVO NOME: ");
+        System.out.print("NOVO NOME: ");
         String name = src.nextLine();
+
         target.setName(name); 
-        
         boolean stat = Arquivo.atualizarRegistroPlayer(target);   
                     
         if(stat) {
-            System.out.println("sucesso!");
-            System.out.println(Arquivo.procurarRegistroCrud(8435).toString()); 
+            System.out.println("Sucesso!");
+            System.out.println(Arquivo.procurarRegistroCrud(id).toString()); 
         }
-        else System.out.println("erro.");
+        else System.out.println("error: Ao atualizar jogador!");
     }
 
-    public static void deletarPlayer(int id){
+    public static void deletarPlayer() {
+        System.out.println("Entre com id para deletar do BD: ");
+        int id = src.nextInt();
         boolean status = Arquivo.deletarRegistroPlayer(id);
-        
-
-        if(status) {
-            System.out.println("Registro deletado com sucesso!");
-        } else {
-            System.out.println("Error ao deletar!");
-        }
-
+        if(status) System.out.println("Registro deletado com sucesso!");
+        else System.out.println("Error ao deletar!");
     }
 
-    // public static void Start() {
-    //     int opc = -1;
-    //     Scanner src = new Scanner(System.in);
-    //     while(opc != 0) {
-    //         System.out.println("================ CRUD =================");
-    //         System.out.println("Selecione a opção desejada");
-    //         System.out.println("0-Sair");
-    //         System.out.println("1-Criar Jogador");
-    //         System.out.println("2-Atualizar Jogador");
-    //         System.out.println("3-Deletar Jogador");
-    //         System.out.println("4-Buscar por id");
-    //         System.out.print("Entre com a opção: ");
-    //         opc = src.nextInt();
-    //         switch (opc) {
-    //         case 1:
-    //             try { Arquivo.salvarNovoRegistro(createPlayer()); } 
-    //             catch(Exception e) { System.out.println(e.getMessage()); }
-    //             break;
-    //         case 2:
-    //             break;
-    //         case 3:
-    //             try { deletePlayer(opc);}
-    //             catch (Exception e) { System.out.println(e.getMessage()); }
-    //             break;
-    //         case 4:
-    //             break;
-    //         default:
-    //             break;
-    //         }
-    //     }
-    // }
+    public static void buscarId() {
+        System.out.println("Entre com id para buscar no BD: ");
+        int id = src.nextInt();
+        Player target = Arquivo.procurarRegistroCrud(id);
+        if(target != null) {
+            System.out.println("-> " + target.toString()); 
+        } else {
+            System.out.println("ERROR: id nao consta no BD");
+        }
+    }
+
+    public static void Start() {
+        int opc = -1;
+        Scanner src = new Scanner(System.in);
+        while(opc != 0) {
+            System.out.println("================ CRUD =================");
+            System.out.println("Selecione a opção desejada");
+            System.out.println("0-Sair");
+            System.out.println("1-Criar Jogador");
+            System.out.println("2-Atualizar Jogador");
+            System.out.println("3-Deletar Jogador");
+            System.out.println("4-Buscar por id");
+            System.out.print("Entre com a opc: ");
+            opc = src.nextInt();
+            switch (opc) {
+            case 1:
+                criarPlayer();
+                break;
+            case 2:
+                atualizarPlayer();
+                break;
+            case 3:
+                deletarPlayer();
+                break;
+            case 4:
+                buscarId();
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }

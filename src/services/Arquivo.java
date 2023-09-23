@@ -106,7 +106,7 @@ public class Arquivo {
             raf.writeInt(player.getId());
             raf.seek(0);
 
-            System.out.println("ultimo id: " + raf.readInt());
+            System.out.println("Ultimo id inserido: " + raf.readInt());
             raf.close();
 
         }catch(IOException e) { e.printStackTrace(); }
@@ -181,18 +181,17 @@ public class Arquivo {
                     if(registro.getPlayer().getId() == target.getId()) {
                         registro.setPlayer(target);
                         regBytes = Converter.toByteArray(target);
-                        System.out.println("size antigo - size novo " + oldLen +  " - " + regBytes.length);
                         
                         if(oldLen >= regBytes.length) {
-                            System.out.println("gravei na mema posicao ");
+                            System.out.println("Registro foi Gravado na mesma posicao");
                             raf.seek(pos);
                             raf.write(regBytes);
                         
                         } else {
-                            System.out.println("gravei no final ");
+                            System.out.println("Registro foi gravado no final ");
                             raf.seek(raf.length());
                             raf.write(regBytes);
-                            raf.seek(pos-2);
+                            raf.seek(pos-2L);
                             raf.writeBoolean(true);
                         
                         }
@@ -225,21 +224,20 @@ public class Arquivo {
             Long pos;
         
             while(cout < ultimoID) {
+                pos = raf.getFilePointer();
                 boolean lapide = raf.readBoolean();
                 int len = raf.readInt();
                 
-                registro.setSize(len);
-                regBytes = new byte[len];
-                pos = raf.getFilePointer();
-
                 if(registro.getLapide() != true) {
+                    regBytes = new byte[len];
+                    registro.setSize(len);
+
                     raf.read(regBytes, 0, registro.getSize());
                     registro = Converter.toObject(regBytes);
                     registro.setLapide(lapide);
                     registro.setSize(len);
                     
                     if(registro.getPlayer().getId() == id) {
-                        pos = pos-2;
                         raf.seek(pos);
                         raf.writeBoolean(true);
                         raf.close();
@@ -249,8 +247,6 @@ public class Arquivo {
              
                 cout++;
             }
-        
-        
         
         } catch(IOException e) { e.printStackTrace(); }
        
