@@ -1,28 +1,28 @@
 package src.entities;
 
 public class Registro {
-    private Boolean lapide;
-    private Long size;
+    private boolean lapide;
+    private int size;
     private Player player;
 
     public Registro() {
-        this(false, 0L, new Player());
+        this(false, 0, new Player());
     }
-    public Registro(Boolean lapide, Long size, Player player) {
+    public Registro(boolean lapide, int size, Player player) {
         this.lapide = lapide;
         this.size = size;
         this.player = player;
     }
-    public Boolean getLapide() {
+    public boolean getLapide() {
         return lapide;
     }
-    public void setLapide(Boolean lapide) {
+    public void setLapide(boolean lapide) {
         this.lapide = lapide;
     }
-    public Long getSize() {
+    public int getSize() {
         return size;
     }
-    public void setSize(Long size) {
+    public void setSize(int size) {
         this.size = size;
     }
     public Player getPlayer() {
