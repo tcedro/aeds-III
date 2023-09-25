@@ -167,7 +167,7 @@ public class Arquivo {
             
             byte[] regBytes;
 
-            while(cout < ultimoID) {
+            while(cout <= ultimoID) {
                 registro.setLapide(raf.readBoolean());
                 oldLen = raf.readInt();
                 regBytes=new byte[oldLen];

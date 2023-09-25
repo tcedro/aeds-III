@@ -17,10 +17,12 @@ public class Crud {
         String pos[] = new String[2];
 
         System.out.println("Nome do jogador: ");
-        player.setName(src.nextLine());
+        String name = src.nextLine();
+        player.setName(name);
 
         System.out.println("Universidade: ");
-        player.setCollegeUniv(src.nextLine());
+        String univ = src.nextLine();
+        player.setCollegeUniv(univ);
 
         System.out.println("Time: ");
         player.setActTeam(src.nextLine());
