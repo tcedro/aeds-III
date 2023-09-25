@@ -273,6 +273,8 @@ public class Arquivo {
             
             while(cout < segmento.length) {
                 registroBytes = Converter.toByteArray(segmento[cout].getPlayer());
+                raf.writeBoolean(false);
+                raf.writeInt(registroBytes.length);
                 raf.write(registroBytes);
                 
                 cout++;

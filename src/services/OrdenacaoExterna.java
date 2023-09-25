@@ -65,14 +65,18 @@ public class OrdenacaoExterna {
     private static void intercalar() {
         //cond de parada
         boolean status = true;
+        
         //leitura arquivo tmp1;
         FileInputStream fis1;
         DataInputStream dos1;
+        
         //leitura arquivo tmp2;
         FileInputStream fis2;
         DataInputStream dos2;
+        
         //metodo de escrita com registro intercalado
         RandomAccessFile raf;
+        
         //registros lidos do arquivo        
         Registro registro1 = new Registro();
         Registro registro2 = new Registro();
@@ -88,33 +92,34 @@ public class OrdenacaoExterna {
             raf = new RandomAccessFile(db, "rws");
             raf.seek(0);
             
-            int ultimoID1 = dos1.readInt();
-            int ultimoID2 = dos2.readInt();
             int x = 0;
-            int cond=0;
+            int cond = -2;
             
             byte[] playerReg1, playerReg2;
             
             while(status != false || x <= 8435) {
-                for(cout=0; cout<100; cout++) {
-                    if(cond == 0) { //cond para ler o dois registro
-                        //ler lapide
-                        registro1.setLapide(dos1.readBoolean());
-                        registro2.setLapide(dos2.readBoolean());
+                //ler lapide
+                registro1.setLapide(dos1.readBoolean());
+                registro2.setLapide(dos2.readBoolean());
+                    System.out.println("lapide1= " +registro1.getLapide());
+                    System.out.println("lapide2= " +registro2.getLapide());
+                //tamanho do registro
+                registro1.setSize(dos1.readInt());
+                registro2.setSize(dos2.readInt());
+                
+                System.out.println("tam1= " +registro1.getSize());
+                System.out.println("tam2= " +registro2.getSize());
                         
-                        //tamanho do registro
-                        registro1.setSize(dos1.readInt());
-                        registro2.setSize(dos2.readInt());
+                //ler bytes dado tamanho do registro
+                playerReg1 = dos1.readNBytes(registro1.getSize());
+                playerReg2 = dos2.readNBytes(registro2.getSize());
                         
-                        //ler bytes dado tamanho do registro
-                        playerReg1 = dos1.readNBytes(registro1.getSize());
-                        playerReg2 = dos2.readNBytes(registro2.getSize());
-                        
-                        //converte bytes para objeto
-                        registro1 = Converter.toObject(playerReg1);
-                        registro2 = Converter.toObject(playerReg2);
+                //converter bytes para objeto
+                registro1 = Converter.toObject(playerReg1);
+                registro2 = Converter.toObject(playerReg2);
 
-                    } else if(cond == 1){ // cond para ler registro do arquivo tmp1
+                for(cout = 1; cout < 100; cout++) {
+                    if(cond == 1){ // cond para ler registro do arquivo tmp1
                         //ler lapide do arquivo tmp1
                         registro1.setLapide(dos1.readBoolean());
                         
@@ -140,27 +145,15 @@ public class OrdenacaoExterna {
                         //converter para objeto
                         registro2 = Converter.toObject(playerReg2);
                     }
-                        
 
-                    //se os dois registros n forem lapide
-                    if(registro1.getLapide() != true && registro2.getLapide() != true) {
-
-                        if(registro1.getPlayer().getId() <= registro2.getPlayer().getId()) {
-                            raf.write(playerReg1);
-                            cond = 1;
-                            
-                        } else { raf.write(playerReg2); }
-                    
-                    
-                    } else if(registro1.getLapide() != true && registro2.getLapide() == true) {
+                    if(registro1.getPlayer().getId() <= registro2.getPlayer().getId()) {
                         raf.write(playerReg1);
                         cond = 1;
-                    
-                    } else if(registro1.getLapide() == true && registro2.getLapide() != true) {
+                    } 
+                    else {
                         raf.write(playerReg2);
                         cond = 2;
-                    
-                    } else { cond = 0; }
+                    }
                 
                 } //for
                 
@@ -174,6 +167,7 @@ public class OrdenacaoExterna {
     }
     public static void intercalacao_balanceada() throws Exception {
         distribuicao();
+        intercalar();
     }
 
     // public static void Start() {
