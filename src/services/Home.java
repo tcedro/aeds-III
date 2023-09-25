@@ -20,7 +20,7 @@
 //                     Crud.Start();
 //                     break;
 //                 case 2:
-//                     Intercalar.Start();
+//                     OrdenacaoExterna.Start();
 //                     break;
 //                 default:
 //                     break;

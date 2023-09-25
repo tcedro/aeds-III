@@ -16,6 +16,7 @@ import src.utils.Converter;
 
 public class Arquivo {
     public static final String db = "src\\data\\nflPlayers.db";
+
     public static Player parsePlayer(String line) {
         String[] columns = line.split(","); 
         int age = 0;
@@ -259,6 +260,26 @@ public class Arquivo {
        
 
         return status;
+    }
+
+    public static void gravarRegistroOrdenacao(Registro[] segmento, String path) {
+        RandomAccessFile raf;
+        int cout = 0;
+        try {
+            raf = new RandomAccessFile(path, "rws");
+            raf.seek(raf.length());
+            
+            byte[] registroBytes;
+            
+            while(cout < segmento.length) {
+                registroBytes = Converter.toByteArray(segmento[cout].getPlayer());
+                raf.write(registroBytes);
+                
+                cout++;
+            }
+            raf.close();
+
+        } catch(IOException e) { e.printStackTrace(); }
     }
 
 }
