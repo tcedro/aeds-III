@@ -125,7 +125,7 @@ public class Arquivo {
             int ultimoID = dos.readInt();
             byte[] regBytes;
 
-            while(cout < ultimoID) {
+            while(cout <= ultimoID) {
         
                 registro.setLapide(dos.readBoolean());
                 registro.setSize(dos.readInt());
@@ -141,8 +141,9 @@ public class Arquivo {
 
                 cout++;
             }
-            fis.close();
+            
             dos.close();
+            fis.close();
 
         }
         catch(FileNotFoundException e) {e.printStackTrace();}
@@ -158,7 +159,7 @@ public class Arquivo {
         int oldLen=0;
         
         try {
-            raf = new RandomAccessFile(db, "rw");
+            raf = new RandomAccessFile(db, "rws");
             
             int ultimoID = raf.readInt();
             System.out.println(ultimoID);
@@ -223,7 +224,7 @@ public class Arquivo {
         int cout = 0;
         byte[] regBytes;
         try {
-            raf = new RandomAccessFile(db, "rw");
+            raf = new RandomAccessFile(db, "rws");
         
             int ultimoID = raf.readInt();
             System.out.println(ultimoID);

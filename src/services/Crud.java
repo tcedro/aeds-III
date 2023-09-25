@@ -63,18 +63,20 @@ public class Crud {
         
         System.out.println("Entre com id para alterar time atual: ");
         int id = src.nextInt();
-
         Player target = Arquivo.procurarRegistroCrud(id);
-        System.out.println("Jogador: " + target.getName());
-        System.out.println("Time atual: " + target.getActTeam());
+        
+        if(target != null) {
+            System.out.println("Jogador: " + target.getName());
+            System.out.println("Time atual: " + target.getActTeam());
 
-        target.setActTeam(novoTime); 
-
-        boolean stat = Arquivo.atualizarRegistroPlayer(target);   
-        if(stat) {
-            System.out.println("Concluido");
-        }
-        else System.out.println("ERROR:Ao atualizar jogador");
+            target.setActTeam(novoTime); 
+            boolean status = Arquivo.atualizarRegistroPlayer(target); 
+            
+            if(status) System.out.println("Concluido");
+            else System.out.println("ERROR:Ao atualizar jogador");  
+        
+        } else System.out.println("Id nao encontrado!");
+        
     }
 
     public static void deletarPlayer() {
@@ -85,7 +87,7 @@ public class Crud {
         else System.out.println("Error ao deletar!");
     }
 
-    public static void buscarId() {
+    public static void buscarPlayerPorId() {
         System.out.println("Entre com id para buscar no BD: ");
         int id = src.nextInt();
         Player target = Arquivo.procurarRegistroCrud(id);
@@ -120,7 +122,7 @@ public class Crud {
                 deletarPlayer();
                 break;
             case 4:
-                buscarId();
+                buscarPlayerPorId();
                 break;
             default:
                 break;
