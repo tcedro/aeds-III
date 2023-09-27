@@ -62,9 +62,11 @@ public class Arquivo {
                 System.out.println("csvToDb: " + player.toString());
                 
                 byte[] byteArray = Converter.toByteArray(player);
+                
                 dos.writeBoolean(false);
                 dos.writeInt(byteArray.length);
                 System.out.println("size of byte: " + byteArray.length);
+                //gravar registro do jogador
                 dos.write(byteArray);
 
                 
@@ -282,6 +284,33 @@ public class Arquivo {
             raf.close();
 
         } catch(IOException e) { e.printStackTrace(); }
+    }
+
+    public static void atualizarDataBaseFileOrdenado(String path) {
+        //leitura do arquivo
+        FileOutputStream fis;
+        DataOutputStream dis;
+
+        //escrever dados no db
+        RandomAccessFile raf;
+
+        byte[] registroByte;
+        try {
+            fis = new FileOutputStream(db);
+            dis = new DataOutputStream(fis);
+
+            raf = new RandomAccessFile(db, "rw");
+            raf.seek(0);
+
+
+
+
+
+            
+        } 
+        catch(FileNotFoundException e) { e.printStackTrace(); }
+        catch(IOException e) { System.out.println(e.getMessage()); }
+      
     }
 
 }

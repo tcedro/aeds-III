@@ -15,14 +15,14 @@ import src.entities.Registro;
 import src.utils.Converter;
 
 public class OrdenacaoExterna {
-    public static final int tamSegmento = 100;
+    public static final int tamBloco = 100;
     public static final String db = "src\\data\\nflPlayers.db";
     public static final String[] tmpFiles = { "tmp1.txt", "tmp2.txt", "tmp3.txt", "tmp4.txt" };
 
     private static void distribuicao() {
         FileInputStream fis;
         DataInputStream dos;
-        Registro[] registros = new Registro[tamSegmento];
+        Registro[] registros = new Registro[tamBloco];
         int cout = 0;
         
         try {
@@ -42,13 +42,14 @@ public class OrdenacaoExterna {
                     if(registros[i].getLapide() != true) {
                         playerBytes = dos.readNBytes(registros[i].getSize());
                         registros[i] = Converter.toObject(playerBytes);
-                    -
+
+
                     } else { dos.skipNBytes(registros[i].getSize()); }
                 
                 }
                 
-                if(cout % 2 == 0) { Arquivo.gravarRegistroOrdenacao(Sort.sort(registros), tmpFiles[0]); } 
-                else              { Arquivo.gravarRegistroOrdenacao(Sort.sort(registros), tmpFiles[1]); }
+                if(cout % 2 == 0) { Arquivo.gravarRegistroOrdenacao( Sort.sort(registros), tmpFiles[0] ); } 
+                else              { Arquivo.gravarRegistroOrdenacao( Sort.sort(registros), tmpFiles[1] ); }
                 
                 cout++;
             }
@@ -63,7 +64,7 @@ public class OrdenacaoExterna {
         catch (IOException e) { System.out.println(e.getMessage());}
     }    
     
-    private static void intercalar() {
+    private static void intercalar(String readFile1, String readFile2, String writeFile1, String writeFile2) {
         //cond de parada
         boolean status = true;
         
@@ -84,38 +85,41 @@ public class OrdenacaoExterna {
         Registro registro2 = new Registro();
         
         int cout = 0;
+        int countWriteFileTmp2 = 0;
         try {
-            fis1 = new FileInputStream(tmpFiles[0]);
-            fis2 = new FileInputStream(tmpFiles[1]);
+            //conectar fluxo de dados
+            fis1 = new FileInputStream(readFile1);
+            fis2 = new FileInputStream(readFile2);
 
             dos1 = new DataInputStream(fis1);
             dos2 = new DataInputStream(fis2);
 
-            raf1 = new RandomAccessFile(tmpFiles[2], "rws");
+            raf1 = new RandomAccessFile(writeFile1, "rws");
             raf1.seek(0);
             
-            raf2 = new RandomAccessFile(tmpFiles[3], "rws");
+            raf2 = new RandomAccessFile(writeFile2, "rws");
             raf2.seek(0);
 
-            int x = 0;
+            int x = 1;
             int cond = -2;
             
             byte[] playerReg1, playerReg2;
 
             //85 = hardcode de vezes que serão rodados ...
-            while(status != false || x <= 85) {
+            while(status != false || x <= 84) { 
+                System.out.println("x= " + x);
                 //ler lapide
                 registro1.setLapide(dos1.readBoolean());
                 registro2.setLapide(dos2.readBoolean());
                 
-                System.out.println("lapide1= " +registro1.getLapide());
-                System.out.println("lapide2= " +registro2.getLapide());
+                System.out.println("lapide1= " + registro1.getLapide());
+                System.out.println("lapide2= " + registro2.getLapide());
                 //tamanho do registro
                 registro1.setSize(dos1.readInt());
                 registro2.setSize(dos2.readInt());
                 
-                System.out.println("tam1= " +registro1.getSize());
-                System.out.println("tam2= " +registro2.getSize());
+                System.out.println("tam1= " + registro1.getSize());
+                System.out.println("tam2= " + registro2.getSize());
                         
                 //ler bytes dado tamanho do registro
                 playerReg1 = dos1.readNBytes(registro1.getSize());
@@ -124,9 +128,10 @@ public class OrdenacaoExterna {
                 //converter bytes para objeto
                 registro1 = Converter.toObject(playerReg1);
                 registro2 = Converter.toObject(playerReg2);
-
-                for(cout = 1; cout < 100; cout++) {
-                    if(x % 2 == 0) {
+                System.out.println("cout= " + 100 * x);
+                for(cout = 0; cout < 100 * x; cout++) {
+                    
+                    if(x % 2 == 0) { // gravacao binaria entre 2 arquivos
                         raf1.seek(raf1.length());
 
                         if(cond == 1) { // cond para ler registro do arquivo tmp1
@@ -197,28 +202,41 @@ public class OrdenacaoExterna {
                         if(registro1.getPlayer().getId() <= registro2.getPlayer().getId()) {
                             raf2.write(playerReg1);
                             cond = 1;
+                            countWriteFileTmp2++;
                         } 
                         else {
                             raf2.write(playerReg2);
                             cond = 2;
+                            countWriteFileTmp2++;
                         }
                         
                     }
-                        
                 } //for
                 
                 x++;
                 cout = 0;
             } //while
 
+            //chamada da recursao fazer dnv ate nao escrever nada no segundo arquivo temporario
+            if(countWriteFileTmp2 > 0 && x % 2 == 0) { intercalar(tmpFiles[2], tmpFiles[3], tmpFiles[1], tmpFiles[0]); }
+            else if(countWriteFileTmp2 > 0 && x % 2 != 0){
+                intercalar(tmpFiles[0], tmpFiles[1], tmpFiles[2], tmpFiles[3]);
+            } else {
+                RandomAccessFile rafDB = new RandomAccessFile(db, "rw");
+                rafDB.seek(1);
+
+                dos1
+            }
+       
+       
+       
         }//try
         catch (IOException e) { System.out.println(e.getMessage());}
 
     }
     public static void intercalacao_balanceada() throws Exception {
-        String[] paths;
         distribuicao();
-        intercalar();
+        intercalar( tmpFiles[0], tmpFiles[1], tmpFiles[2], tmpFiles[3] );
     }
 
     // public static void Start() {
