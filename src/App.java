@@ -11,7 +11,9 @@ public class App {
     public static void main(String[] args) throws Exception { 
         DBConfig.StartConfig(); 
 
-        CrudArvoreBplus.deletarPlayerPorId();
+        // CrudArvoreBplus.deletarPlayerPorId();
+        // CrudArvoreBplus.buscarPlayerPorId();
+        CrudArvoreBplus.atualizarPlayer();
         CrudArvoreBplus.buscarPlayerPorId();
         
         

@@ -2,6 +2,9 @@ package src.services;
 
 import java.util.Scanner;
 
+import src.entities.Player;
+import src.utils.Converter;
+
 public class CrudArvoreBplus {
     public static void deletarPlayerPorId(){
         Scanner scr = new Scanner(System.in);
@@ -21,15 +24,34 @@ public class CrudArvoreBplus {
         scr.close();
     }
     public static void criarPlayer(){}
-    public static void atualizarPlayer(){}
+    public static void atualizarPlayer(){
+        Scanner scr = new Scanner(System.in);
+        System.out.println("Entre com ID para atualizar no BD:");
+        int id = scr.nextInt();
+
+        long ptr = Arquivo.arvore.buscar(id);
+        
+        Player plr = Arquivo.buscarPlayerPorIdComIndexArvoreBPlus(ptr);
+        
+        // System.out.println("Entre com novo time:");
+        // String novoTime = scr.nextLine();
+        plr.setActTeam("timao");
+
+        Arquivo.atualizarPlayerComIndexArvoreBPlus(ptr, Converter.toByteArray(plr));
+        
+        if(plr != null) {
+            System.out.println("Operacao feita com sucesso!");
+        } else { System.out.println("ERROR:registro nao encontrado!"); }
+        scr.close();
+    }
     public static void buscarPlayerPorId(){
         Scanner scr = new Scanner(System.in);
         // System.out.println("Entre com ID para buscar no BD: ");
         // int id = scr.nextInt();
 
         long ptr = Arquivo.arvore.buscar(1);
-        boolean status = Arquivo.buscarPlayerPorIdComIndexArvoreBPlus(ptr);
-        if(status) {
+        Player plr = Arquivo.buscarPlayerPorIdComIndexArvoreBPlus(ptr);
+        if(plr != null) {
             System.out.println("Operacao feita com sucesso!");
         } else { System.out.println("ERROR:registro nao encontrado!"); }
         scr.close();

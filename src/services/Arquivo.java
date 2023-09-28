@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Scanner;
 
+import javax.sound.midi.Soundbank;
 
 import src.entities.Player;
 import src.entities.Registro;
@@ -380,9 +382,9 @@ public class Arquivo {
         return status;
     }
 
-    public static boolean buscarPlayerPorIdComIndexArvoreBPlus(Long ptr) {
-        boolean status = false;
+    public static Player buscarPlayerPorIdComIndexArvoreBPlus(Long ptr) {
         Registro registro;
+        Registro registro2 = null;
         byte[] byteReg;
         try {
         
@@ -397,10 +399,9 @@ public class Arquivo {
             if(registro.getLapide() != true) {
                 raf.read(byteReg);
                 
-                Registro registro2 = Converter.toObject(byteReg);
+                registro2 = Converter.toObject(byteReg);
                 registro2.setSize(byteReg.length);
                 
-                status = true;
 
             }
             raf.close();
@@ -408,9 +409,52 @@ public class Arquivo {
         } catch(IOException e) { e.printStackTrace(); }
     
 
+        return registro2.getPlayer();
+
+    }
+
+    public static boolean atualizarPlayerComIndexArvoreBPlus(Long ptr, byte[] newRegistro) {
+        boolean status = false;
+        Registro registro;
+        Registro registro2 = null;
+        byte[] byteReg;
+        
+        try {
+        
+            RandomAccessFile raf = new RandomAccessFile(db, "rw");
+            registro = new Registro();
+            raf.seek(ptr);
+            
+            registro.setLapide(raf.readBoolean());            
+            registro.setSize(raf.readInt()); 
+            byteReg = new byte[registro.getSize()];
+            
+            if(registro.getLapide() != true) {
+                raf.read(byteReg);
+                if(newRegistro.length >= byteReg.length) {
+                    System.out.println("Registro gravado no final");
+
+                    raf.seek(raf.length());
+                    raf.writeBoolean(false);
+                    raf.writeInt(newRegistro.length);
+                    raf.write(newRegistro);
+                    status = true;
+                } else {
+                    System.out.println("Gravado no mesmo lugar");
+                    
+                    raf.seek(ptr);
+                    raf.writeBoolean(false);
+                    raf.writeInt(newRegistro.length);
+                    raf.write(newRegistro);
+                    status = true;
+                }
+            }
+            raf.close();
+        
+        } catch(IOException e) { e.printStackTrace(); }
+    
 
         return status;
-
     }
 
 }
