@@ -19,38 +19,49 @@ public class OrdenacaoExterna {
     public static final String db = "src\\data\\nflPlayers.db";
     public static final String[] tmpFiles = { "tmp1.txt", "tmp2.txt", "tmp3.txt", "tmp4.txt" };
 
-    private static void distribuicao() {
+    private static void distribuicao() 
+    {
 
         RandomAccessFile raf;
         Registro[] registros = new Registro[tamBloco];
         int cout = 0;
         
-        try {
+        try 
+        {
             raf = new RandomAccessFile(db, "r");
             
             int ultimoID = raf.readInt();
             System.out.println("ultimo id: " + ultimoID);
             
             byte[] playerBytes;
-            while (cout <= ultimoID) {
-                for(int i = 0; i < 100; i++) {
+            while (cout <= ultimoID) 
+            {
+                for(int i = 0; i < tamBloco; i++) 
+                {
                     registros[i] = new Registro();
                     
                     registros[i].setLapide(raf.readBoolean());
                     registros[i].setSize(raf.readInt());
                     playerBytes = new byte[registros[i].getSize()];
+
                     System.out.println("lapide= " + registros[i].getLapide());
                     System.out.println("size= " + registros[i].getSize());
-                    if(registros[i].getLapide() != true) {
+                    
+                    if(registros[i].getLapide() != true) 
+                    {
                         raf.read(playerBytes);
                         registros[i] = Converter.toObject(playerBytes);
 
-
-                    } else { 
+                    } 
+                    else 
+                    { 
                         raf.skipBytes(registros[i].getSize()); 
-                        if(i != 0) {
+                        if(i != 0) 
+                        {
                             i=i-2; 
-                        } else {
+                        } 
+                        else 
+                        {
                             i=i-1;
                         }
                     }
@@ -80,12 +91,10 @@ public class OrdenacaoExterna {
         boolean status = true;
         
         //leitura arquivo tmp1;
-        FileInputStream fis1;
-        DataInputStream dos1;
+        RandomAccessFile fis1;
+        RandomAccessFile fis2;
         
-        //leitura arquivo tmp2;
-        FileInputStream fis2;
-        DataInputStream dos2;
+
         
         //metodo de escrita com registro intercalado
         RandomAccessFile raf1;
@@ -99,16 +108,13 @@ public class OrdenacaoExterna {
         int countWriteFileTmp2 = 0;
         try {
             //conectar fluxo de dados
-            fis1 = new FileInputStream(readFile1);
-            fis2 = new FileInputStream(readFile2);
+            fis1 = new RandomAccessFile(readFile2, "rw");
+            fis2 = new RandomAccessFile(readFile2, "rw");
 
-            dos1 = new DataInputStream(fis1);
-            dos2 = new DataInputStream(fis2);
-
-            raf1 = new RandomAccessFile(writeFile1, "rws");
+            raf1 = new RandomAccessFile(writeFile1, "rw");
             raf1.seek(0);
             
-            raf2 = new RandomAccessFile(writeFile2, "rws");
+            raf2 = new RandomAccessFile(writeFile2, "rw");
             raf2.seek(0);
 
             int x = 1;
@@ -121,25 +127,29 @@ public class OrdenacaoExterna {
                 System.out.println("x= " + x);
                 
                 //ler lapide
-                registro1.setLapide(dos1.readBoolean());
-                registro2.setLapide(dos2.readBoolean());
+                registro1.setLapide(fis1.readBoolean());
+                registro2.setLapide(fis2.readBoolean());
                 
                 System.out.println("lapide1= " + registro1.getLapide());
                 System.out.println("lapide2= " + registro2.getLapide());
                 
                 //tamanho do registro
-                registro1.setSize(dos1.readInt());
-                registro2.setSize(dos2.readInt());
+                registro1.setSize(fis1.readInt());
+                registro2.setSize(fis2.readInt());
                 
                 System.out.println("tam1= " + registro1.getSize());
                 System.out.println("tam2= " + registro2.getSize());
+
+                playerReg1  = new byte[registro1.getSize()];
+                playerReg2  = new byte[registro2.getSize()];
                         
                 //ler bytes dado tamanho do registro
-                playerReg1 = dos1.readNBytes(registro1.getSize());
-                playerReg2 = dos2.readNBytes(registro2.getSize());
+                fis1.read(playerReg1);
+                fis2.read(playerReg2);
 
                 System.out.println(Converter.toObject(playerReg1).getPlayer().toString());
                 System.out.println(Converter.toObject(playerReg2).getPlayer().toString());
+
                 //converter bytes para objeto
                 registro1 = Converter.toObject(playerReg1);
                 registro2 = Converter.toObject(playerReg2);
@@ -151,29 +161,32 @@ public class OrdenacaoExterna {
 
                         if(cond == 1) { // cond para ler registro do arquivo tmp1
                             //ler lapide do arquivo tmp1
-                            registro1.setLapide(dos1.readBoolean());
                             
+                            registro1.setLapide(fis1.readBoolean());
                             //ler tamanho do registro
-                            registro1.setSize(dos1.readInt());
-                            
+                            registro1.setSize(fis1.readInt());
+
+                            playerReg1 = new byte[registro1.getSize()];
+
                             //ler bytes dado tamanho do registro
-                            playerReg1 = dos1.readNBytes(registro1.getSize());
+                            fis1.read(playerReg1);
                             
                             //converter para objeto
                             registro1 = Converter.toObject(playerReg1);
                         
                         } else { // cond para ler registro do arquivo tmp2
                             //ler lapide do arquivo tmp1
-                            registro2.setLapide(dos2.readBoolean());
-                            
+                            registro2.setLapide(fis2.readBoolean());
                             //ler tamanho do registro
-                            registro2.setSize(dos2.readInt());
-                            
-                            //ler bytes dado tamanho do registro
-                            playerReg2 = dos2.readNBytes(registro2.getSize());
+                            registro2.setSize(fis2.readInt());
+
+                            playerReg2 = new byte[registro2.getSize()];
+
+                            //ler bytes dado tamanho do registros
+                            fis2.read(playerReg2);
                             
                             //converter para objeto
-                            registro2 = Converter.toObject(playerReg2);
+                            registro1 = Converter.toObject(playerReg2);
                         }
 
                         if(registro1.getPlayer().getId() <= registro2.getPlayer().getId()) {
@@ -190,26 +203,30 @@ public class OrdenacaoExterna {
                         if(cond == 1){ // cond para ler registro do arquivo tmp1
                             
                         //ler lapide do arquivo tmp1
-                        registro1.setLapide(dos1.readBoolean());
+                        registro1.setLapide(fis1.readBoolean());
                             
                         //ler tamanho do registro
-                        registro1.setSize(dos1.readInt());
+                        registro1.setSize(fis1.readInt());
                             
                         //ler bytes dado tamanho do registro
-                        playerReg1 = dos1.readNBytes(registro1.getSize());
+                        playerReg1 = new byte[registro1.getSize()];
+
+                        fis1.read(playerReg1);
                             
                         //converter para objeto
                         registro1 = Converter.toObject(playerReg1);
                         
                         } else { // cond para ler registro do arquivo tmp2
                             //ler lapide do arquivo tmp1
-                            registro2.setLapide(dos2.readBoolean());
+                            registro2.setLapide(fis2.readBoolean());
                             
                             //ler tamanho do registro
-                            registro2.setSize(dos2.readInt());
+                            registro2.setSize(fis2.readInt());
                             
                             //ler bytes dado tamanho do registro
-                            playerReg2 = dos2.readNBytes(registro2.getSize());
+                            playerReg2 = new byte[registro2.getSize()];
+
+                            fis2.read(playerReg2);
                             
                             //converter para objeto
                             registro2 = Converter.toObject(playerReg2);

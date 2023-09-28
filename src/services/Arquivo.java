@@ -190,7 +190,7 @@ public class Arquivo {
                 pos = raf.getFilePointer();
 
                 if(registro.getLapide() != true) {
-                    raf.read(regBytes, 0, registro.getSize());
+                    raf.read(regBytes);
                     registro = Converter.toObject(regBytes);
                     
                     if(registro.getPlayer().getId() == target.getId()) {
@@ -301,32 +301,43 @@ public class Arquivo {
     public static void atualizarDataBaseFileOrdenado(String path) {
         System.out.println("Atualizando +++++++++");
         //leitura do arquivo
-        FileInputStream fis;
-        DataInputStream dis;
-
+        RandomAccessFile rafRead;
         //escrever dados no db
-        RandomAccessFile raf;
+        RandomAccessFile rafWrite;
         //registro
         Registro registro = new Registro();
+        int x = 0;
 
         byte[] registroByte;
         try {
-            fis = new FileInputStream(path);
-            dis = new DataInputStream(fis);
-            raf = new RandomAccessFile(db, "rw");
-            raf.seek(0);
+            int ultimoID = -1;
+            rafRead = new RandomAccessFile(path, "r");
+            rafWrite = new RandomAccessFile(db, "rw");
 
-            registro.setLapide(dis.readBoolean());
-            registro.setSize(dis.readInt());
+            while(rafRead.getFilePointer() < rafRead.length() && x < 8436) {
+                System.out.println(x++);
+                rafRead = new RandomAccessFile(path, "r");
+                rafWrite = new RandomAccessFile(db, "rw");
+                rafWrite.seek(4);
 
-            registroByte = dis.readNBytes(registro.getSize());
+                registro.setLapide(rafRead.readBoolean());
+                registro.setSize(rafRead.readInt());
 
-            registro = Converter.toObject(registroByte);
-            
-            //escrever registro
-            raf.writeBoolean(registro.getLapide());
-            raf.writeInt(registroByte.length);
-            raf.write(registroByte);
+                registroByte = new byte[registro.getSize()];
+                rafRead.read(registroByte);
+
+                registro = Converter.toObject(registroByte);
+                ultimoID = registro.getPlayer().getId();
+                
+                //escrever registro
+                rafWrite.writeBoolean(registro.getLapide());
+                rafWrite.writeInt(registroByte.length);
+                rafWrite.write(registroByte);
+            }
+            rafWrite.seek(0);
+
+            rafWrite.writeInt(ultimoID);
+                
 
         } 
         catch(FileNotFoundException e) { e.printStackTrace(); }
