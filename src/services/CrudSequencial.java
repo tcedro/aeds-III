@@ -104,7 +104,7 @@ public class CrudSequencial {
         int opc = -1;
         Scanner src = new Scanner(System.in);
         while(opc != 0) {
-            System.out.println("================ CRUD =================");
+            System.out.println("================ CRUD SEQUENCIAL =================");
             System.out.println("Selecione a opção desejada");
             System.out.println("0-Sair");
             System.out.println("1-Criar Jogador");

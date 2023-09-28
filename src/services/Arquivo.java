@@ -363,4 +363,54 @@ public class Arquivo {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
+    // ARVORE B+ OPERACOES
+
+    public static boolean deletarPlayerComIndexArvoreBPlus(Long ptr) {
+        boolean status = false;
+        try{
+        
+            RandomAccessFile raf = new RandomAccessFile(db, "rw");
+        
+            raf.seek(ptr);
+            raf.writeBoolean(true);
+            status = true;
+        
+        } catch(IOException e) { e.printStackTrace(); }
+    
+        return status;
+    }
+
+    public static boolean buscarPlayerPorIdComIndexArvoreBPlus(Long ptr) {
+        boolean status = false;
+        Registro registro;
+        byte[] byteReg;
+        try {
+        
+            RandomAccessFile raf = new RandomAccessFile(db, "rw");
+            registro = new Registro();
+            raf.seek(ptr);
+            
+            registro.setLapide(raf.readBoolean());            
+            registro.setSize(raf.readInt()); 
+            byteReg = new byte[registro.getSize()];
+            
+            if(registro.getLapide() != true) {
+                raf.read(byteReg);
+                
+                Registro registro2 = Converter.toObject(byteReg);
+                registro2.setSize(byteReg.length);
+                
+                status = true;
+
+            }
+            raf.close();
+        
+        } catch(IOException e) { e.printStackTrace(); }
+    
+
+
+        return status;
+
+    }
+
 }
