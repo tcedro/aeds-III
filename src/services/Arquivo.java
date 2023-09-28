@@ -12,10 +12,12 @@ import java.io.RandomAccessFile;
 
 import src.entities.Player;
 import src.entities.Registro;
+import src.entities.RegistroIndexado;
 import src.utils.Converter;
 
 public class Arquivo {
     public static final String db = "src\\data\\nflPlayers.db";
+    public static ArvoreBPlus arvore;
 
     public static Player parsePlayer(String line) {
         String[] columns = line.split(","); 
@@ -54,18 +56,23 @@ public class Arquivo {
             //pos do ultimo id
             dos.writeInt(0);
             //gravar todos registros convertendo pra byte array
+
             while ((csvLine = raf.readLine()) != null) {
+                RegistroIndexado registroIndexado = new RegistroIndexado();
+
                 Player player = parsePlayer(csvLine);
                 player.setId(++i);
+                
+                registroIndexado.setId(i);
 
 
-                System.out.println("csvToDb: " + player.toString());
+                // System.out.println("csvToDb: " + player.toString());
                 
                 byte[] byteArray = Converter.toByteArray(player);
                 
                 dos.writeBoolean(false);
                 dos.writeInt(byteArray.length);
-                System.out.println("size of byte: " + byteArray.length);
+                // System.out.println("size of byte: " + byteArray.length);
                 //gravar registro do jogador
                 dos.write(byteArray);
 
@@ -287,30 +294,73 @@ public class Arquivo {
     }
 
     public static void atualizarDataBaseFileOrdenado(String path) {
+        System.out.println("Atualizando +++++++++");
         //leitura do arquivo
-        FileOutputStream fis;
-        DataOutputStream dis;
+        FileInputStream fis;
+        DataInputStream dis;
 
         //escrever dados no db
         RandomAccessFile raf;
+        //registro
+        Registro registro = new Registro();
 
         byte[] registroByte;
         try {
-            fis = new FileOutputStream(db);
-            dis = new DataOutputStream(fis);
-
+            fis = new FileInputStream(path);
+            dis = new DataInputStream(fis);
             raf = new RandomAccessFile(db, "rw");
             raf.seek(0);
 
+            registro.setLapide(dis.readBoolean());
+            registro.setSize(dis.readInt());
 
+            registroByte = dis.readNBytes(registro.getSize());
 
-
-
+            registro = Converter.toObject(registroByte);
             
+            //escrever registro
+            raf.writeBoolean(registro.getLapide());
+            raf.writeInt(registroByte.length);
+            raf.write(registroByte);
+
         } 
         catch(FileNotFoundException e) { e.printStackTrace(); }
         catch(IOException e) { System.out.println(e.getMessage()); }
       
+    }
+
+    public static void criarBPlusTree() throws Exception {
+        arvore = new ArvoreBPlus(8);
+        long ptr = 0;
+
+        RandomAccessFile raf;
+        Registro registro;
+
+        try {
+            
+            raf = new RandomAccessFile(db, "r");
+            raf.seek(0);
+            System.out.println("ultimo id: " + raf.readInt()); 
+            
+            byte[] bytearray;
+            
+            while(raf.getFilePointer() < raf.length() ) {
+                registro = new Registro();
+                ptr = raf.getFilePointer();
+                
+                registro.setLapide(raf.readBoolean());
+                registro.setSize(raf.readInt());
+
+                bytearray = new byte[registro.getSize()];
+                raf.read(bytearray);
+                
+                if(registro.getLapide() != true) {
+                    Registro registro2 = Converter.toObject(bytearray);
+                    System.out.println(registro2.getPlayer().toString());
+                    arvore.inserir(registro2.getPlayer().getId(), ptr);
+                }
+            }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
 }

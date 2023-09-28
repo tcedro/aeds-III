@@ -3,7 +3,7 @@ package src.services;
 import java.util.Scanner;
 import src.entities.Player;
 
-public class Crud {
+public class CrudSequencial {
     public static final Scanner src = new Scanner(System.in);
 
     public static void criarPlayer() {

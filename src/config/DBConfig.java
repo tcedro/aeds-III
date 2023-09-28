@@ -19,8 +19,12 @@ public class DBConfig {
         return (getSO().indexOf("nix") >= 0 || getSO().indexOf("nux") >= 0 || getSO().indexOf("aix") > 0);
     }
     
-    public static void startDB(String pathCSV, String pathDB) { Arquivo.CsvToDB(pathCSV, pathDB); }
-    public static void StartConfig() {
+    public static void startDB(String pathCSV, String pathDB) throws Exception{ 
+        Arquivo.CsvToDB(pathCSV, pathDB);
+        Arquivo.criarBPlusTree();
+
+    }
+    public static void StartConfig() throws Exception {
         String pathCSV = readPathCSVConfig();
         String pathDB = readPathDBConfig();
         

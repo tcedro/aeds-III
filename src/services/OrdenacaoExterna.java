@@ -37,6 +37,7 @@ public class OrdenacaoExterna {
                 for(int i = 0; i < 100; i++) {
                     registros[i] = new Registro();
                     registros[i].setLapide(dos.readBoolean());
+                    
                     registros[i].setSize(dos.readInt());
 
                     if(registros[i].getLapide() != true) {
@@ -62,6 +63,9 @@ public class OrdenacaoExterna {
          
         catch (FileNotFoundException e) { e.printStackTrace(); }
         catch (IOException e) { System.out.println(e.getMessage());}
+        catch(NullPointerException e) {
+            e.printStackTrace();
+        }
     }    
     
     private static void intercalar(String readFile1, String readFile2, String writeFile1, String writeFile2) {
@@ -106,14 +110,16 @@ public class OrdenacaoExterna {
             byte[] playerReg1, playerReg2;
 
             //85 = hardcode de vezes que serão rodados ...
-            while(status != false || x <= 84) { 
+            while(x < 85 || status != false) { 
                 System.out.println("x= " + x);
+                
                 //ler lapide
                 registro1.setLapide(dos1.readBoolean());
                 registro2.setLapide(dos2.readBoolean());
                 
                 System.out.println("lapide1= " + registro1.getLapide());
                 System.out.println("lapide2= " + registro2.getLapide());
+                
                 //tamanho do registro
                 registro1.setSize(dos1.readInt());
                 registro2.setSize(dos2.readInt());
@@ -124,15 +130,17 @@ public class OrdenacaoExterna {
                 //ler bytes dado tamanho do registro
                 playerReg1 = dos1.readNBytes(registro1.getSize());
                 playerReg2 = dos2.readNBytes(registro2.getSize());
-                        
+
+                System.out.println(Converter.toObject(playerReg1).getPlayer().toString());
+                System.out.println(Converter.toObject(playerReg2).getPlayer().toString());
                 //converter bytes para objeto
                 registro1 = Converter.toObject(playerReg1);
                 registro2 = Converter.toObject(playerReg2);
-                System.out.println("cout= " + 100 * x);
-                for(cout = 0; cout < 100 * x; cout++) {
+                
+                for(cout = 0; cout < 100; cout++) {
                     
                     if(x % 2 == 0) { // gravacao binaria entre 2 arquivos
-                        raf1.seek(raf1.length());
+                        raf1.seek(0);
 
                         if(cond == 1) { // cond para ler registro do arquivo tmp1
                             //ler lapide do arquivo tmp1
@@ -171,7 +179,7 @@ public class OrdenacaoExterna {
                         }
                 
                     } else {
-                        raf2.seek(raf2.length());
+                        raf2.seek(0);
                         if(cond == 1){ // cond para ler registro do arquivo tmp1
                             
                         //ler lapide do arquivo tmp1
@@ -212,26 +220,26 @@ public class OrdenacaoExterna {
                         
                     }
                 } //for
+                if(countWriteFileTmp2 == 0) { Arquivo.atualizarDataBaseFileOrdenado(tmpFiles[0]); status = false; }
                 
                 x++;
                 cout = 0;
             } //while
 
             //chamada da recursao fazer dnv ate nao escrever nada no segundo arquivo temporario
-            if(countWriteFileTmp2 > 0 && x % 2 == 0) { intercalar(tmpFiles[2], tmpFiles[3], tmpFiles[1], tmpFiles[0]); }
+            if(countWriteFileTmp2 > 0 && x % 2 == 0) {
+                System.out.println("tmp 3 tmp 4 tmp 0 tmp 1");
+                 intercalar(tmpFiles[2], tmpFiles[3], tmpFiles[0], tmpFiles[1]); 
+                }
             else if(countWriteFileTmp2 > 0 && x % 2 != 0){
+                System.out.println("tmp 0 tmp 1 tmp 2 tmp 3");
                 intercalar(tmpFiles[0], tmpFiles[1], tmpFiles[2], tmpFiles[3]);
             } else {
-                RandomAccessFile rafDB = new RandomAccessFile(db, "rw");
-                rafDB.seek(1);
-
-                dos1
+                System.out.println("atualizar DB");
+                Arquivo.atualizarDataBaseFileOrdenado(tmpFiles[0]);
             }
-       
-       
-       
         }//try
-        catch (IOException e) { System.out.println(e.getMessage());}
+        catch (IOException e) { System.out.println("deu erro");}
 
     }
     public static void intercalacao_balanceada() throws Exception {

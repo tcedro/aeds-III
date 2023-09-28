@@ -3,12 +3,20 @@ package src;
 import src.config.DBConfig;
 import src.entities.Player;
 import src.services.Arquivo;
-import src.services.Crud;
+import src.services.CrudSequencial;
 import src.services.OrdenacaoExterna;
 
 public class App {
     public static void main(String[] args) throws Exception { 
         DBConfig.StartConfig(); 
+        Arquivo.arvore.imprimir();
+        
+        
+        
+        // Crud.atualizarPlayer();
+        // Crud.Start();
+        
+        
         //Crud
         // Home.runAplicattion();
         // Crud.Start();
@@ -23,7 +31,6 @@ public class App {
             
         // String path[] = new String[2];
 
-        OrdenacaoExterna.intercalacao_balanceada();
 
 
         
