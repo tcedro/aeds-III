@@ -23,7 +23,13 @@ public class CrudArvoreBplus {
         
         scr.close();
     }
-    public static void criarPlayer(){}
+
+    public static void criarPlayer(){
+        Player plr = CrudSequencial.createPlayer();
+        Arquivo.gravarNovoRegistroCrudIndexadoArvoreBplus(plr);
+    }
+
+
     public static void atualizarPlayer(){
         Scanner scr = new Scanner(System.in);
         System.out.println("Entre com ID para atualizar no BD:");
@@ -33,9 +39,9 @@ public class CrudArvoreBplus {
         
         Player plr = Arquivo.buscarPlayerPorIdComIndexArvoreBPlus(ptr);
         
-        // System.out.println("Entre com novo time:");
-        // String novoTime = scr.nextLine();
-        plr.setActTeam("timao");
+        System.out.println("Entre com novo time:");
+        String novoTime = scr.nextLine();
+        plr.setActTeam("novoTime");
 
         Arquivo.atualizarPlayerComIndexArvoreBPlus(ptr, Converter.toByteArray(plr));
         
@@ -49,9 +55,10 @@ public class CrudArvoreBplus {
         // System.out.println("Entre com ID para buscar no BD: ");
         // int id = scr.nextInt();
 
-        long ptr = Arquivo.arvore.buscar(1);
+        long ptr = Arquivo.arvore.buscar(8436);
         Player plr = Arquivo.buscarPlayerPorIdComIndexArvoreBPlus(ptr);
         if(plr != null) {
+            System.out.println("registro-> " + plr.toString());
             System.out.println("Operacao feita com sucesso!");
         } else { System.out.println("ERROR:registro nao encontrado!"); }
         scr.close();

@@ -1,4 +1,4 @@
-package src.services;
+package src.estruturas;
 
 class Chave {
   public int id;
@@ -150,6 +150,28 @@ public class ArvoreBPlus {
         pai.filhos[i + 1] = novo;
 
         return pai;
+        }
+    }
+
+    public void atualizarPtr(int id, Long ptr) {
+         atualizarPtr(this.raiz, id, ptr);
+    }
+
+    private void atualizarPtr(No no, int id, Long ptr) {
+        // Se o nó for folha, retorna o ponteiro da chave
+        if (no.folha) {
+        for (int i = 0; i < no.numChaves; i++) {
+            if (no.chaves[i].id == id) {
+                no.chaves[i].pointer = ptr;
+            }
+        }
+        } else {
+        // Se o nó não for folha, procura o filho onde a chave deve estar
+        int i = 0;
+        while (i < no.numChaves && id > no.chaves[i].id) {
+            i++;
+        }
+            atualizarPtr(no.filhos[i], id, ptr);
         }
     }
 

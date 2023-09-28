@@ -15,6 +15,7 @@ import javax.sound.midi.Soundbank;
 import src.entities.Player;
 import src.entities.Registro;
 import src.entities.RegistroIndexado;
+import src.estruturas.ArvoreBPlus;
 import src.utils.Converter;
 
 public class Arquivo {
@@ -433,7 +434,12 @@ public class Arquivo {
                 raf.read(byteReg);
                 if(newRegistro.length >= byteReg.length) {
                     System.out.println("Registro gravado no final");
+                    // deletarPlayerComIndexArvoreBPlus(ptr);
 
+                    Arquivo.arvore.atualizarPtr(1, raf.length());                    
+                    raf.seek(ptr);
+                    raf.writeBoolean(true);
+                    
                     raf.seek(raf.length());
                     raf.writeBoolean(false);
                     raf.writeInt(newRegistro.length);
@@ -452,9 +458,34 @@ public class Arquivo {
             raf.close();
         
         } catch(IOException e) { e.printStackTrace(); }
-    
 
         return status;
     }
 
+    public static void gravarNovoRegistroCrudIndexadoArvoreBplus(Player registro) {
+        RandomAccessFile raf;
+        
+        byte[] regBytes;
+        try {
+            raf = new RandomAccessFile(db, "rw");
+            int ultimoID = raf.readInt();
+            System.out.println(ultimoID);
+            int id = ultimoID + 1;
+
+
+            registro.setId(id);
+            regBytes = Converter.toByteArray(registro);
+
+            raf.seek(raf.length());
+            Long ptr = raf.getFilePointer();
+            
+            raf.writeBoolean(false);
+            raf.writeInt(regBytes.length);
+            raf.write(regBytes);
+
+            arvore.inserir(id, ptr);            
+
+            raf.close();
+        } catch(IOException e) {e.printStackTrace(); }
+    }
 }

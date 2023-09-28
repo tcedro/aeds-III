@@ -13,7 +13,8 @@ public class App {
 
         // CrudArvoreBplus.deletarPlayerPorId();
         // CrudArvoreBplus.buscarPlayerPorId();
-        CrudArvoreBplus.atualizarPlayer();
+        // CrudArvoreBplus.atualizarPlayer();
+        CrudArvoreBplus.criarPlayer();
         CrudArvoreBplus.buscarPlayerPorId();
         
         
