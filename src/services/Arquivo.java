@@ -94,6 +94,8 @@ public class Arquivo {
     }
 
 
+    //==============================CRUD SEQUENCIAL=================================//
+
     public static void gravarNovoRegistroCrud(Player player) {
         RandomAccessFile raf;
         int id;
@@ -366,7 +368,7 @@ public class Arquivo {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    // ARVORE B+ OPERACOES
+    //============================== CRUD ARVORE B+ =================================//
 
     public static boolean deletarPlayerComIndexArvoreBPlus(Long ptr) {
         boolean status = false;

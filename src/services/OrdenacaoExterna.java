@@ -20,32 +20,40 @@ public class OrdenacaoExterna {
     public static final String[] tmpFiles = { "tmp1.txt", "tmp2.txt", "tmp3.txt", "tmp4.txt" };
 
     private static void distribuicao() {
-        FileInputStream fis;
-        DataInputStream dos;
+
+        RandomAccessFile raf;
         Registro[] registros = new Registro[tamBloco];
         int cout = 0;
         
         try {
-            fis = new FileInputStream(db);
-            dos = new DataInputStream(fis);
+            raf = new RandomAccessFile(db, "r");
             
-            int ultimoID = dos.readInt();
+            int ultimoID = raf.readInt();
             System.out.println("ultimo id: " + ultimoID);
             
             byte[] playerBytes;
             while (cout <= ultimoID) {
                 for(int i = 0; i < 100; i++) {
                     registros[i] = new Registro();
-                    registros[i].setLapide(dos.readBoolean());
                     
-                    registros[i].setSize(dos.readInt());
-
+                    registros[i].setLapide(raf.readBoolean());
+                    registros[i].setSize(raf.readInt());
+                    playerBytes = new byte[registros[i].getSize()];
+                    System.out.println("lapide= " + registros[i].getLapide());
+                    System.out.println("size= " + registros[i].getSize());
                     if(registros[i].getLapide() != true) {
-                        playerBytes = dos.readNBytes(registros[i].getSize());
+                        raf.read(playerBytes);
                         registros[i] = Converter.toObject(playerBytes);
 
 
-                    } else { dos.skipNBytes(registros[i].getSize()); }
+                    } else { 
+                        raf.skipBytes(registros[i].getSize()); 
+                        if(i != 0) {
+                            i=i-2; 
+                        } else {
+                            i=i-1;
+                        }
+                    }
                 
                 }
                 
@@ -56,8 +64,7 @@ public class OrdenacaoExterna {
             }
 
             
-            fis.close();
-            dos.close();
+            raf.close();
             
         }
          
@@ -137,7 +144,7 @@ public class OrdenacaoExterna {
                 registro1 = Converter.toObject(playerReg1);
                 registro2 = Converter.toObject(playerReg2);
                 
-                for(cout = 0; cout < 100; cout++) {
+                for(cout = 1; cout < 100; cout++) {
                     
                     if(x % 2 == 0) { // gravacao binaria entre 2 arquivos
                         raf1.seek(0);
@@ -228,18 +235,22 @@ public class OrdenacaoExterna {
 
             //chamada da recursao fazer dnv ate nao escrever nada no segundo arquivo temporario
             if(countWriteFileTmp2 > 0 && x % 2 == 0) {
+                
                 System.out.println("tmp 3 tmp 4 tmp 0 tmp 1");
-                 intercalar(tmpFiles[2], tmpFiles[3], tmpFiles[0], tmpFiles[1]); 
-                }
+                intercalar(tmpFiles[2], tmpFiles[3], tmpFiles[0], tmpFiles[1]); 
+            }
+            
             else if(countWriteFileTmp2 > 0 && x % 2 != 0){
+                
                 System.out.println("tmp 0 tmp 1 tmp 2 tmp 3");
                 intercalar(tmpFiles[0], tmpFiles[1], tmpFiles[2], tmpFiles[3]);
+            
             } else {
-                System.out.println("atualizar DB");
+                System.out.println("atualizar DB"); 
                 Arquivo.atualizarDataBaseFileOrdenado(tmpFiles[0]);
             }
         }//try
-        catch (IOException e) { System.out.println("deu erro");}
+        catch (IOException e) { Arquivo.atualizarDataBaseFileOrdenado(tmpFiles[0]); }
 
     }
     public static void intercalacao_balanceada() throws Exception {
