@@ -10,10 +10,11 @@ import src.services.OrdenacaoExterna;
 public class App {
     public static void main(String[] args) throws Exception { 
         DBConfig.StartConfig(); 
-        CrudSequencial.atualizarPlayer();
-        OrdenacaoExterna.intercalacao_balanceada();
-        CrudSequencial.buscarPlayerPorId();
+        // CrudSequencial.atualizarPlayer();
+        // OrdenacaoExterna.intercalacao_balanceada();
+        // CrudSequencial.buscarPlayerPorId();
 
+        OrdenacaoExterna.intercalacao_balanceada();
 
 
         
