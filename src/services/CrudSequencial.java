@@ -7,6 +7,7 @@ public class CrudSequencial {
     public static final Scanner src = new Scanner(System.in);
 
     public static void criarPlayer() {
+        System.out.println("=========  criar jogador ==========");
         Player target = createPlayer();
         Arquivo.gravarNovoRegistroCrud(target);
     }
@@ -49,6 +50,7 @@ public class CrudSequencial {
     }
 
     public static void searchPlayer(int id) {
+        System.out.println("=========  procurar jogador ==========");
         Player target = Arquivo.procurarRegistroCrud(id);
         if(target != null) System.out.println("JOGADOR: " + target.toString());
         else { System.out.println("REGISTRO NAO ENCONTRADO!"); }
@@ -61,6 +63,7 @@ public class CrudSequencial {
     }
 
     public static void atualizarPlayer() {
+        System.out.println("=========  atualizar jogador ==========");
         String novoTime = readNewTeam();
         
         System.out.println("Entre com id para alterar time atual: ");
@@ -82,6 +85,7 @@ public class CrudSequencial {
     }
 
     public static void deletarPlayer() {
+        System.out.println("=========  deletar jogador ==========");
         System.out.println("Entre com id para deletar do BD: ");
         int id = src.nextInt();
         boolean status = Arquivo.deletarRegistroPlayer(id);

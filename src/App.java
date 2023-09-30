@@ -9,12 +9,30 @@ import src.services.OrdenacaoExterna;
 
 public class App {
     public static void main(String[] args) throws Exception { 
-        DBConfig.StartConfig(); 
-        // CrudSequencial.atualizarPlayer();
-        // OrdenacaoExterna.intercalacao_balanceada();
-        // CrudSequencial.buscarPlayerPorId();
+        DBConfig.StartConfig();
 
-        OrdenacaoExterna.intercalacao_balanceada();
+        // Crud Sequenciais
+
+        // CrudSequencial.criarPlayer();
+        // CrudSequencial.buscarPlayerPorId();
+        // CrudSequencial.deletarPlayer();
+        // CrudSequencial.atualizarPlayer();
+
+        // Crud Arvore B plus
+
+        // CrudArvoreBplus.atualizarPlayer();
+        // CrudArvoreBplus.buscarPlayerPorId();
+        // CrudArvoreBplus.deletarPlayerPorId();
+        // CrudArvoreBplus.buscarPlayerPorId();
+
+        // Ordenação Externa tamanho fixo
+        // OrdenacaoExterna.intercalacao_balanceada();
+
+
+
+
+
+        // OrdenacaoExterna.intercalacao_balanceada();
 
 
         

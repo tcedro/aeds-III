@@ -109,7 +109,7 @@ public class Arquivo {
             
             raf.seek(raf.length());
 
-            System.out.println("Gravando registro: " + player.toString());
+            // System.out.println("Gravando registro: " + player.toString());
             byte[] byteArray = Converter.toByteArray(player);
             
             raf.writeBoolean(false);
@@ -324,6 +324,7 @@ public class Arquivo {
 
                 registro = Converter.toObject(playerByte);
                 ultimoID = registro.getPlayer().getId();
+                System.out.println("'inserindo ordenado' + " + registro.getPlayer().getId());
 
                 write.writeBoolean(registro.getLapide());
                 write.writeInt(registro.getSize());
@@ -340,52 +341,6 @@ public class Arquivo {
         
         } catch(IOException e) { e.printStackTrace(); }
     }
-    // public static void atualizarDataBaseFileOrdenado(String path) {
-    //     System.out.println("Atualizando +++++++++");
-    //     //leitura do arquivo
-    //     RandomAccessFile rafRead;
-    //     //escrever dados no db
-    //     RandomAccessFile rafWrite;
-    //     //registro
-    //     Registro registro = new Registro();
-    //     int x = 0;
-
-    //     byte[] registroByte;
-    //     try {
-    //         int ultimoID = -1;
-    //         rafRead = new RandomAccessFile(path, "r");
-    //         rafWrite = new RandomAccessFile(db, "rw");
-
-    //         while(rafRead.getFilePointer() < rafRead.length() && x < 8436) {
-    //             System.out.println(x++);
-    //             rafRead = new RandomAccessFile(path, "r");
-    //             rafWrite = new RandomAccessFile(db, "rw");
-    //             rafWrite.seek(4);
-
-    //             registro.setLapide(rafRead.readBoolean());
-    //             registro.setSize(rafRead.readInt());
-
-    //             registroByte = new byte[registro.getSize()];
-    //             rafRead.read(registroByte);
-
-    //             registro = Converter.toObject(registroByte);
-    //             ultimoID = registro.getPlayer().getId();
-                
-    //             //escrever registro
-    //             rafWrite.writeBoolean(registro.getLapide());
-    //             rafWrite.writeInt(registroByte.length);
-    //             rafWrite.write(registroByte);
-    //         }
-    //         rafWrite.seek(0);
-
-    //         rafWrite.writeInt(ultimoID);
-                
-
-    //     } 
-    //     catch(FileNotFoundException e) { e.printStackTrace(); }
-    //     catch(IOException e) { System.out.println(e.getMessage()); }
-      
-    // }
 
     public static void criarBPlusTree() throws Exception {
         arvore = new ArvoreBPlus(8);
@@ -438,13 +393,13 @@ public class Arquivo {
         return status;
     }
 
-    public static Player buscarPlayerPorIdComIndexArvoreBPlus(Long ptr) {
+    public static Registro buscarPlayerPorIdComIndexArvoreBPlus(Long ptr) {
         Registro registro;
         Registro registro2 = null;
         byte[] byteReg;
         try {
         
-            RandomAccessFile raf = new RandomAccessFile(db, "rw");
+            RandomAccessFile raf = new RandomAccessFile(db, "r");
             registro = new Registro();
             raf.seek(ptr);
             
@@ -456,16 +411,13 @@ public class Arquivo {
                 raf.read(byteReg);
                 
                 registro2 = Converter.toObject(byteReg);
-                registro2.setSize(byteReg.length);
-                
-
             }
             raf.close();
         
         } catch(IOException e) { e.printStackTrace(); }
     
 
-        return registro2.getPlayer();
+        return registro2;
 
     }
 
