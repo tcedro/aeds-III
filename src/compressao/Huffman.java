@@ -5,6 +5,7 @@ import java.util.PriorityQueue;
 import src.estruturas.Huffman.HuffmanFolha;
 import src.estruturas.Huffman.HuffmanNode;
 import src.estruturas.Huffman.HuffmanTree;
+import src.services.Arquivo;
 
 public class Huffman {
     public static void start(String text) {
@@ -24,10 +25,13 @@ public class Huffman {
         String encode = encode(tree, text);
         System.out.println("\nTexto Compactado:");
         System.out.println(encode);
+        System.out.println("Criando novo arquivo em: data/playerCompressaoHuffman.txt");
+        Arquivo.compactarEmArquivoHuffman(encode);
 
         //decodificar
-        System.out.println("\n\nTexto Decodificado");
-        System.out.println(decode(tree, encode));
+        System.out.println("\n\nTexto Decodificado do Arquivo gerado: data/playerCompressaoHuffman.txt");
+        String encodedDoArquivo = Arquivo.lerArquivoCompactadoHuffman();
+        System.out.println(decode(tree, encodedDoArquivo));
         System.out.println("\n\n");
 
     }

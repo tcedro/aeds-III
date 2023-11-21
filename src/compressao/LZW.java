@@ -15,9 +15,12 @@ public class LZW {
         System.out.println("OBS: compactação de apenas 10 registros do csv");
         System.out.println("\nTexto Compactado:");
         System.out.println(compressed);
+        System.out.println("Criando novo arquivo em: data/playerCompressaoLZW.txt");
+        Arquivo.compactarEmArquivoLZW(text);
+        
         
         //descompressao lzw
-        System.out.println("\n\nTexto Decodificado");
+        System.out.println("\n\nTexto Decodificado do Arquivo gerado: data/playerCompressaoLZW.txt");
         String decompressed = LZW.decode(compressed);
         System.out.println(decompressed);
         System.out.println("\n\n");

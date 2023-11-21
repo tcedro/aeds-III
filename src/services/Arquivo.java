@@ -21,7 +21,45 @@ import src.utils.Converter;
 public class Arquivo {
     public static final String db = "src\\data\\nflPlayers.db";
     public static ArvoreBPlus arvore;
-
+    public static void compactarEmArquivoHuffman(String coded) {
+        RandomAccessFile raf;
+        try {
+            raf = new RandomAccessFile("src\\data\\playerCompressaoHuffman.txt", "rw");
+            raf.writeUTF(coded);
+            raf.close();
+        }catch(IOException e) { System.err.println(e.getMessage()); }
+    }
+    public static String lerArquivoCompactadoHuffman() {
+        RandomAccessFile raf;
+        StringBuilder s = new StringBuilder();
+        try {
+            raf = new RandomAccessFile("src\\data\\playerCompressaoHuffman.txt", "rw");
+            while ( raf.getFilePointer() < raf.length() ) {
+                s.append(raf.readLine());
+            }
+        }catch(IOException e) { System.err.println(e.getMessage()); }
+        return s.toString();
+    }
+    public static void compactarEmArquivoLZW(String coded) {
+        RandomAccessFile raf;
+        try {
+            raf = new RandomAccessFile("src\\data\\playerCompressaoLZW.txt", "rw");
+            raf.writeUTF(coded);
+            raf.close();
+        }catch(IOException e) { System.err.println(e.getMessage()); }
+    }
+    public static String lerArquivoCompactadoLZW() {
+        RandomAccessFile raf;
+        StringBuilder s = new StringBuilder();
+        try {
+            raf = new RandomAccessFile("src\\data\\playerCompressaoLZW.txt", "rw");
+            while ( raf.getFilePointer() < raf.length() ) {
+                s.append(raf.readLine());
+            }
+            raf.close();
+        }catch(IOException e) { System.err.println(e.getMessage()); }
+        return s.toString();
+    }
     public static Player parsePlayer(String line) {
         String[] columns = line.split(","); 
         int age = 0;
@@ -52,9 +90,7 @@ public class Arquivo {
                 idx++;
             }
             raf.close();
-
         } catch (IOException e) {System.err.println(e.getMessage());}
-        
         return str.toString();
     }
 
