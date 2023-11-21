@@ -41,6 +41,23 @@ public class Arquivo {
         return new Player(name, date, age, positions, collegeUniv, actTeam);
     }
 
+    public static String selecionarApenasDezRegistros(String pathRead) {
+        RandomAccessFile raf;
+        StringBuilder str = new StringBuilder();
+        int idx=0;
+        try {
+            raf = new RandomAccessFile(pathRead, "rw");
+            while (idx < 10) {
+                str.append(raf.readLine());
+                idx++;
+            }
+            raf.close();
+
+        } catch (IOException e) {System.err.println(e.getMessage());}
+        
+        return str.toString();
+    }
+
     public static void CsvToDB(String pathRead, String pathWrite) {
         DataOutputStream dos;
         FileOutputStream arq;
@@ -61,6 +78,7 @@ public class Arquivo {
             //gravar todos registros convertendo pra byte array
 
             while ((csvLine = raf.readLine()) != null) {
+                csvLine = raf.readLine();
                 RegistroIndexado registroIndexado = new RegistroIndexado();
 
                 Player player = parsePlayer(csvLine);
@@ -128,37 +146,35 @@ public class Arquivo {
     }
 
     public static Player procurarRegistroCrud(int id) {
-        FileInputStream fis;
-        DataInputStream dos;
+
+        RandomAccessFile raf;
         Registro registro = new Registro();
         int cout = 0;
         
         try {
-            fis = new FileInputStream(db);
-            dos = new DataInputStream(fis);
+            raf = new RandomAccessFile(db, "r");
             
-            int ultimoID = dos.readInt();
+            int ultimoID = raf.readInt();
             byte[] regBytes;
 
             while(cout <= ultimoID) {
         
-                registro.setLapide(dos.readBoolean());
-                registro.setSize(dos.readInt());
-                
+                registro.setLapide(raf.readBoolean());
+                registro.setSize(raf.readInt());
+                regBytes = new byte[registro.getSize()];
                 if(registro.getLapide() != true) {
                     
-                    regBytes = dos.readNBytes(registro.getSize());
+                    raf.read(regBytes);
                     registro = Converter.toObject(regBytes);
         
                     if(registro.getPlayer().getId() == id) { return registro.getPlayer(); }
 
-                } else { dos.skipBytes(registro.getSize()); }
+                } else { raf.skipBytes(registro.getSize()); }
 
                 cout++;
             }
             
-            dos.close();
-            fis.close();
+            raf.close();
 
         }
         catch(FileNotFoundException e) {e.printStackTrace();}

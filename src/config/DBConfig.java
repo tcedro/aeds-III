@@ -21,7 +21,6 @@ public class DBConfig {
     
     public static void startDB(String pathCSV, String pathDB) throws Exception{ 
         Arquivo.CsvToDB(pathCSV, pathDB);
-        Arquivo.criarBPlusTree();
 
     }
     public static void StartConfig() throws Exception {
