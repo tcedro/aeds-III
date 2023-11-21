@@ -41,7 +41,7 @@ public class Arquivo {
         return new Player(name, date, age, positions, collegeUniv, actTeam);
     }
 
-    public static String selecionarApenasDezRegistros(String pathRead) {
+    public static String selecionarApenasDezRegistrosDoCSV(String pathRead) {
         RandomAccessFile raf;
         StringBuilder str = new StringBuilder();
         int idx=0;

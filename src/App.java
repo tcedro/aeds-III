@@ -8,7 +8,7 @@ public class App {
     public static void main(String[] args) throws Exception { 
         // DBConfig.StartConfig();
         // System.out.println(Arquivo.selecionarApenasDezRegistros("src\\data\\nfl_draft.csv"));
-        Huffman.start(Arquivo.selecionarApenasDezRegistros("src\\data\\nfl_draft.csv"));
+        Huffman.start(Arquivo.selecionarApenasDezRegistrosDoCSV("src\\data\\nfl_draft.csv"));
         // Huffman.start("paralelepipedo");
     }
 }
