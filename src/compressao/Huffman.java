@@ -8,6 +8,8 @@ import src.estruturas.Huffman.HuffmanTree;
 
 public class Huffman {
     public static void start(String text) {
+        System.out.println("\n======================= Huffman =========================");
+        System.out.println("OBS: compactação de apenas 10 registros do csv");
         int[] frequenciaCaracteres = new int[413]; // equivalente a 10 linhas do csv
         for (char c : text.toCharArray()) {
             frequenciaCaracteres[c]++;
@@ -26,6 +28,7 @@ public class Huffman {
         //decodificar
         System.out.println("\n\nTexto Decodificado");
         System.out.println(decode(tree, encode));
+        System.out.println("\n\n");
 
     }
 
