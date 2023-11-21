@@ -1,4 +1,4 @@
-package src.compressao;
+package src.compressaoDeDados;
 
 import java.util.PriorityQueue;
 

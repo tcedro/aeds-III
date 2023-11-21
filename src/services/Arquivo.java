@@ -19,7 +19,7 @@ import src.estruturas.ArvoreBPlus;
 import src.utils.Converter;
 
 public class Arquivo {
-    public static final String db = "src\\data\\nflPlayers.db";
+    public static final String db = "src\\data\\nfl_draft.csv";
     public static ArvoreBPlus arvore;
     public static void compactarEmArquivoHuffman(String coded) {
         RandomAccessFile raf;
@@ -79,12 +79,12 @@ public class Arquivo {
         return new Player(name, date, age, positions, collegeUniv, actTeam);
     }
 
-    public static String selecionarApenasDezRegistrosDoCSV(String pathRead) {
+    public static String selecionarApenasDezRegistrosDoCSV() {
         RandomAccessFile raf;
         StringBuilder str = new StringBuilder();
         int idx=0;
         try {
-            raf = new RandomAccessFile(pathRead, "rw");
+            raf = new RandomAccessFile(db, "rw");
             while (idx < 10) {
                 str.append(raf.readLine());
                 idx++;

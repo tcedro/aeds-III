@@ -1,4 +1,4 @@
-package src.compressao;
+package src.compressaoDeDados;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ public class LZW {
     public static void start(String text) {
         System.out.println("\n======================= LZW =========================");
         //compressao lzw
-        List<Integer> compressed = LZW.encode(Arquivo.selecionarApenasDezRegistrosDoCSV("src\\data\\nfl_draft.csv"));
+        List<Integer> compressed = LZW.encode(Arquivo.selecionarApenasDezRegistrosDoCSV());
         System.out.println("OBS: compactação de apenas 10 registros do csv");
         System.out.println("\nTexto Compactado:");
         System.out.println(compressed);

@@ -2,10 +2,12 @@ package src.services;
 
 import java.util.Scanner;
 
-import src.compressao.Huffman;
-import src.compressao.LZW;
+import src.casamentoDePadrao.KMP;
+import src.compressaoDeDados.Huffman;
+import src.compressaoDeDados.LZW;
 
 public class Home {
+
     public static void runAplicattion() {
         int key = -1;
         Scanner src = new Scanner(System.in);
@@ -13,19 +15,31 @@ public class Home {
             
             System.out.println("=================== NFL PLAYERS PICK ===================");
             System.out.println("0-Sair");
-            System.out.println("1-Huffman");
-            System.out.println("2-LZW");
+            System.out.println("1-Huffman (Compactar) (Descompactar)");
+            System.out.println("2-LZW (Compactar) (Descompactar)");
+            System.out.println("3-KMP (Casamento de padrão)");
+            System.out.println("4-Boyer Moore (Casamento de padrão))");
+
             System.out.print("Entre com a opção: ");
             key = src.nextInt();
             
             switch (key) {
                 case 1:
-                    Huffman.start(Arquivo.selecionarApenasDezRegistrosDoCSV("src\\data\\nfl_draft.csv"));
+                    Huffman.start(Arquivo.selecionarApenasDezRegistrosDoCSV());
                     break;
                 case 2:
-                    LZW.start(Arquivo.selecionarApenasDezRegistrosDoCSV("src\\data\\nfl_draft.csv"));
+                    LZW.start(Arquivo.selecionarApenasDezRegistrosDoCSV());
+                    break;
+                case 3:
+                    KMP.start(Arquivo.selecionarApenasDezRegistrosDoCSV());
+                    break;
+                case 4:
+                    System.out.println("Escolha um padrão para o texto (Sugestão = 'Flo' || 'Florida'): ");
+                    String padrao1 = src.nextLine();
+                    LZW.start(Arquivo.selecionarApenasDezRegistrosDoCSV());
                     break;
                 default:
+                    src.close();
                     break;
             }
         }
