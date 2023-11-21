@@ -2,6 +2,7 @@ package src.services;
 
 import java.util.Scanner;
 
+import src.casamentoDePadrao.BoyerMoore;
 import src.casamentoDePadrao.KMP;
 import src.compressaoDeDados.Huffman;
 import src.compressaoDeDados.LZW;
@@ -34,9 +35,7 @@ public class Home {
                     KMP.start(Arquivo.selecionarApenasDezRegistrosDoCSV());
                     break;
                 case 4:
-                    System.out.println("Escolha um padrão para o texto (Sugestão = 'Flo' || 'Florida'): ");
-                    String padrao1 = src.nextLine();
-                    LZW.start(Arquivo.selecionarApenasDezRegistrosDoCSV());
+                    BoyerMoore.start(Arquivo.selecionarApenasDezRegistrosDoCSV());
                     break;
                 default:
                     src.close();
