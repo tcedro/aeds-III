@@ -1,16 +1,11 @@
 package src.services;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Scanner;
-
-import javax.sound.midi.Soundbank;
 
 import src.entities.Player;
 import src.entities.Registro;
@@ -145,6 +140,28 @@ public class Arquivo {
 
 
         } catch(IOException e) { System.out.println(e.getMessage()); } 
+    }
+
+    public static String[] getVetorDeNomesDoCsv() {
+        String[] nomes = new String[10];
+        RandomAccessFile raf;
+        try {
+            raf = new RandomAccessFile(db, "rw");
+            int i = 0;
+
+            while (i < 10) {
+                String line = raf.readLine();
+                Player auxPlayer = parsePlayer(line);
+
+                nomes[i] = auxPlayer.getName(); 
+                i++;
+            }
+
+            raf.close();
+
+        } catch(IOException e) { System.err.println(e.getMessage()); }
+
+        return nomes;
     }
 
 
