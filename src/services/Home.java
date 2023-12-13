@@ -6,6 +6,8 @@ import src.casamentoDePadrao.BoyerMoore;
 import src.casamentoDePadrao.KMP;
 import src.compressaoDeDados.Huffman;
 import src.compressaoDeDados.LZW;
+import src.criptografia.TransposicaoColunar;
+import src.criptografia.Vigenere;
 
 public class Home {
 
@@ -20,6 +22,8 @@ public class Home {
             System.out.println("2-LZW (Compactar) (Descompactar)");
             System.out.println("3-KMP (Casamento de padrão)");
             System.out.println("4-Boyer Moore (Casamento de padrão))");
+            System.out.println("5-Vigenere (Criptografia)");
+            System.out.println("6-Transposição colunar Criptografia)");
 
             System.out.print("Entre com a opção: ");
             key = src.nextInt();
@@ -37,6 +41,12 @@ public class Home {
                 case 4:
                     BoyerMoore.start(Arquivo.selecionarApenasDezRegistrosDoCSV());
                     break;
+                case 5:
+                    Vigenere.start();
+                break;
+                case 6:
+                    TransposicaoColunar.start();
+                break;
                 default:
                     src.close();
                     break;
